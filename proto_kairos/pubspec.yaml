@@ -35,6 +35,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   flutter_native_splash: ^2.4.6
+  flutter_screenutil: ^5.9.3
+  google_fonts: ^6.3.0
+  flutter_svg: ^2.0.13
+  smooth_page_indicator: ^1.2.1
 
 dev_dependencies:
   flutter_test:
@@ -90,10 +94,11 @@ flutter:
   # see https://flutter.dev/to/font-from-package
   assets:
     - assets/branding/
+    - assets/illustrations/
 
 
 flutter_native_splash:
-  color: "#212121"
+  color: "#121212"
   #image: assets/splash.png
   branding: assets/branding/branding-myapp-kairos.png
   branding_mode: bottom
@@ -101,7 +106,7 @@ flutter_native_splash:
 
   android_12:
     #image: assets/android12splash.png
-    color: "#212121"
+    color: "#121212"
     #icon_background_color: "#111111"
     branding: assets/branding/branding-myapp-kairos.png
 
