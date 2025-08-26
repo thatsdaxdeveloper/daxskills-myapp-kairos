@@ -96,6 +96,7 @@ flutter:
   assets:
     - assets/branding/
     - assets/illustrations/
+    - assets/icons/
 
 
 flutter_native_splash:

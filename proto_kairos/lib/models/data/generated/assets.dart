@@ -2,8 +2,10 @@
 class Assets {
   Assets._();
 
+  static const String arrowToLeftSvgrepoCom = 'assets/icons/arrow-to-left-svgrepo-com.svg';
   static const String brandingMyappKairos = 'assets/branding/branding-myapp-kairos.png';
   static const String eventsCalendar = 'assets/illustrations/events-calendar.svg';
+  static const String plusSvgrepoCom = 'assets/icons/plus-svgrepo-com.svg';
   static const String target = 'assets/illustrations/target.svg';
   static const String timeManagement = 'assets/illustrations/time-management.svg';
 

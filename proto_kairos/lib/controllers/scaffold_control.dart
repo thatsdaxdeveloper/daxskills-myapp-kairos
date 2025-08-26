@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:proto_kairos/models/data/generated/assets.dart';
 import 'package:proto_kairos/views/pages/home_page.dart';
+import 'package:proto_kairos/views/themes/theme_app.dart';
+import 'package:proto_kairos/views/utils/svg_util.dart';
 
 class ScaffoldControl extends StatefulWidget {
   const ScaffoldControl({super.key});
@@ -13,6 +18,26 @@ class _ScaffoldControlState extends State<ScaffoldControl> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: HomePage(),
+      floatingActionButton: _buildFloatingActionButton(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    );
+  }
+
+  Widget _buildFloatingActionButton() {
+    return InkWell(
+      onTap: () => context.push('/home/add'),
+      borderRadius: BorderRadius.circular(20.r),
+      splashColor: ThemeApp.eerieBlack.withValues(alpha: 0.3),
+      highlightColor: ThemeApp.eerieBlack.withValues(alpha: 0.1),
+      child: Ink(
+        height: 50.h,
+        width: 50.h,
+        decoration: BoxDecoration(
+          color: ThemeApp.trueWhite.withValues(alpha: 0.06),
+          borderRadius: BorderRadius.circular(20.r),
+        ),
+        child: Center(child: svgIcon(path: Assets.plusSvgrepoCom, size: 32)),
+      ),
     );
   }
 }
