@@ -10,6 +10,7 @@ class ThemeApp {
 
   static ThemeData theme() {
     return ThemeData(
+      fontFamily: GoogleFonts.lato().fontFamily,
       useMaterial3: true,
       scaffoldBackgroundColor: eerieBlack,
       primaryColor: tropicalIndigo,

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:proto_kairos/controllers/date_picker_control.dart';
 import 'package:proto_kairos/models/data/generated/assets.dart';
 import 'package:proto_kairos/views/utils/svg_util.dart';
 
-class AddPage extends StatelessWidget {
-  const AddPage({super.key});
+class AddEventPage extends StatelessWidget {
+  const AddEventPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +28,19 @@ class AddPage extends StatelessWidget {
           ],
         ),
       ),
-      body: Center(child: Text('Add')),
+      body: Padding(
+        padding: EdgeInsetsGeometry.symmetric(vertical: 20.h, horizontal: 10.w),
+        child: Column(
+          children: [
+            // Champs pour la date
+            DatePickerControl(),
+
+            // Champs pour le titre
+
+            // Bouton de soumission
+          ],
+        ),
+      ),
     );
   }
 }
