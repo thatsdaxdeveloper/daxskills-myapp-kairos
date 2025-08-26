@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:proto_kairos/models/data/generated/assets.dart';
+import 'package:proto_kairos/views/themes/theme_app.dart';
 import 'package:proto_kairos/views/utils/svg_util.dart';
 import 'package:proto_kairos/views/widgets/my_primary_button.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -9,17 +10,16 @@ class OnboardingPage extends StatelessWidget {
   OnboardingPage({super.key});
 
   final PageController _pageController = PageController();
-  final int _numPages = 3; // Nombre total de pages d'onboarding
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _pages = [
+    final List<Widget> pages = [
       _onboardingContent(
         context: context,
         title: "Centralisez vos attentes",
         description: [
           TextSpan(
-            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp),
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
             text: "Ne perdez plus de vue ",
             children: [
               TextSpan(
@@ -27,7 +27,7 @@ class OnboardingPage extends StatelessWidget {
                 text: "les dates clés.",
               ),
               TextSpan(
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
                 text: " Gardez tous ",
               ),
               TextSpan(
@@ -35,7 +35,7 @@ class OnboardingPage extends StatelessWidget {
                 text: "vos événements importants ",
               ),
               TextSpan(
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
                 text: "à portée de main.",
               ),
             ],
@@ -52,7 +52,7 @@ class OnboardingPage extends StatelessWidget {
             text: "Visualisez le temps restant ",
             children: [
               TextSpan(
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
                 text: "précisément, ",
               ),
               TextSpan(
@@ -60,7 +60,7 @@ class OnboardingPage extends StatelessWidget {
                 text: "jusqu'à la seconde",
               ),
               TextSpan(
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
                 text: ", pour ",
               ),
               TextSpan(
@@ -68,7 +68,7 @@ class OnboardingPage extends StatelessWidget {
                 text: "chaque objectif",
               ),
               TextSpan(
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
                 text: ".",
               ),
             ],
@@ -85,7 +85,7 @@ class OnboardingPage extends StatelessWidget {
             text: "Concentrez-vous sur l'essentiel ",
             children: [
               TextSpan(
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
                 text: "en laissant ",
               ),
               TextSpan(
@@ -93,7 +93,7 @@ class OnboardingPage extends StatelessWidget {
                 text: "Kairos ",
               ),
               TextSpan(
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
                 text: "le compte à rebours.",
               ),
             ],
@@ -114,8 +114,8 @@ class OnboardingPage extends StatelessWidget {
 
           PageView.builder(
             controller: _pageController,
-            itemCount: _pages.length,
-            itemBuilder: (context, index) => _pages[index],
+            itemCount: pages.length,
+            itemBuilder: (context, index) => pages[index],
             onPageChanged: (index) {
             },
           ),
@@ -124,6 +124,7 @@ class OnboardingPage extends StatelessWidget {
           Align(
             alignment: Alignment(0, 0.9),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // Bouton de navigation
                 MyPrimaryButton(text: "Continuer",),
@@ -132,11 +133,11 @@ class OnboardingPage extends StatelessWidget {
                 SizedBox(
                   width: 140.w,
                   child: RichText(text: TextSpan(
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 12.sp, fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 12.sp, color: ThemeApp.trueWhite, fontWeight: FontWeight.bold),
                     text: "Synchronisation des données ",
                       children: [
                         TextSpan(
-                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 12.sp),
+                            style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 12.sp, color: ThemeApp.trueWhite),
                           text: "bientôt disponible."
                         )
                   ])),

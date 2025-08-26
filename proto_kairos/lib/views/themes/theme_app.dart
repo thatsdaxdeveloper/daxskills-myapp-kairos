@@ -19,7 +19,7 @@ class ThemeApp {
   static TextTheme _textTheme() {
     return TextTheme(
       // Displays - Pour splash screens, onboarding
-      displayLarge: GoogleFonts.lato(fontSize: 42.sp, fontWeight: FontWeight.w700, color: trueWhite),
+      displayLarge: GoogleFonts.lato(fontSize: 52.sp, fontWeight: FontWeight.w700, color: trueWhite),
       displayMedium: GoogleFonts.lato(fontSize: 28.sp, fontWeight: FontWeight.w600, color: trueWhite),
       displaySmall: GoogleFonts.lato(fontSize: 24.sp, fontWeight: FontWeight.w600, color: trueWhite),
 
