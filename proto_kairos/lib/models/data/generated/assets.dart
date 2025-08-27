@@ -4,11 +4,13 @@ class Assets {
 
   static const String arrowToLeftSvgrepoCom = 'assets/icons/arrow-to-left-svgrepo-com.svg';
   static const String brandingMyappKairos = 'assets/branding/branding-myapp-kairos.png';
+  static const String calendar1SvgrepoCom = 'assets/icons/calendar-1-svgrepo-com.svg';
   static const String chevronLeftSquareSvgrepoCom = 'assets/icons/chevron-left-square-svgrepo-com.svg';
   static const String chevronRightSquareSvgrepoCom = 'assets/icons/chevron-right-square-svgrepo-com.svg';
   static const String eventsCalendar = 'assets/illustrations/events-calendar.svg';
   static const String plusSvgrepoCom = 'assets/icons/plus-svgrepo-com.svg';
   static const String target = 'assets/illustrations/target.svg';
   static const String timeManagement = 'assets/illustrations/time-management.svg';
+  static const String timeSvgrepoCom = 'assets/icons/time-svgrepo-com.svg';
 
 }

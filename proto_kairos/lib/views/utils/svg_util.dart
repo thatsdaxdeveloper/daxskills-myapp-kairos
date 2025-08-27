@@ -7,6 +7,6 @@ Widget svgImage({required String path}) {
   return SvgPicture.asset(path, height: 180.h, fit: BoxFit.cover);
 }
 
-Widget svgIcon({required String path, double size = 24}) {
-  return SvgPicture.asset(path, height: size.h, width: size.h, colorFilter: ColorFilter.mode(ThemeApp.trueWhite, BlendMode.srcIn),);
+Widget svgIcon({required String path, double size = 24, Color color = Colors.white}) {
+  return SvgPicture.asset(path, height: size.h, width: size.h, colorFilter: ColorFilter.mode(color, BlendMode.srcIn),);
 }
