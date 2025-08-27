@@ -38,7 +38,7 @@ class AddEventPage extends StatelessWidget {
         ),
         body: Padding(
           padding: EdgeInsetsGeometry.symmetric(vertical: 20.h, horizontal: 10.w),
-          child: AddEventControl(),
+          child: SingleChildScrollView(child: AddEventControl()),
         ),
       ),
     );

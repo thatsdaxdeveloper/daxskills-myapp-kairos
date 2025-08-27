@@ -5,6 +5,7 @@ import "package:proto_kairos/views/themes/theme_app.dart";
 import "package:proto_kairos/views/utils/svg_util.dart";
 import "package:smooth_page_indicator/smooth_page_indicator.dart";
 import "package:table_calendar/table_calendar.dart";
+import "package:wheel_picker/wheel_picker.dart";
 
 class AddEventControl extends StatefulWidget {
   const AddEventControl({super.key});
@@ -66,37 +67,28 @@ class _AddEventControlState extends State<AddEventControl> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final primaryColor = Theme.of(context).primaryColor;
-    return SizedBox(
-      height: 1.sh,
-      child: Column(
-        children: [
-          // Formulaire de texte
-          _buildForm(),
+    return Column(
+      children: [
+        // Formulaire de texte
+        _buildForm(),
 
-          SizedBox(height: 30.h),
+        SizedBox(height: 80.h),
 
-          // Formulaire d"ajout d"un evenement
-          _buildIndicator(),
-          SizedBox(height: 6.h),
-          Expanded(
-              child: PageView(
-                controller: _pageController,
-                  children: [
-                    _buildPickDate(),
-                    _buildPickTime()
-                  ],
-              )
-          ),
-
-        ],
-      ),
+        // Formulaire d"ajout d"un evenement
+        _buildIndicator(),
+        SizedBox(height: 6.h),
+        SizedBox(
+          height: 360.h,
+          child: PageView(controller: _pageController, children: [_buildPickDate(), _buildPickTime()]),
+        ),
+      ],
     );
   }
 
   Widget _buildForm() {
     final textTheme = Theme.of(context).textTheme;
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Champ de titre
         TextFormField(
@@ -109,31 +101,33 @@ class _AddEventControlState extends State<AddEventControl> {
             hintStyle: textTheme.headlineLarge!.copyWith(color: ThemeApp.trueWhite.withValues(alpha: 0.1)),
             border: InputBorder.none,
             contentPadding: EdgeInsets.symmetric(vertical: 12.h),
+            isDense: true,
           ),
-          maxLines: 1,
+          maxLines: null,
+          // Permet plusieurs lignes
+          keyboardType: TextInputType.multiline,
+          textInputAction: TextInputAction.next,
+          onFieldSubmitted: (_) {
+            // Passe au champ suivant (contenu) quand on appuie sur entrée
+            FocusScope.of(context).nextFocus();
+          },
         ),
 
         // Champ de contenu
-        Container(
-          height: 120.h,
-          decoration: BoxDecoration(
-            color: ThemeApp.trueWhite.withValues(alpha: 0.008),
-            borderRadius: BorderRadius.circular(6.r),
+        TextFormField(
+          controller: contentController,
+          cursorColor: ThemeApp.trueWhite,
+          style: textTheme.bodyMedium,
+          decoration: InputDecoration(
+            hintText: "Ajoutez des détails utiles (lieu, contacts, notes...)",
+            hintStyle: textTheme.bodyMedium!.copyWith(color: ThemeApp.trueWhite.withValues(alpha: 0.1)),
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.zero,
+            isDense: true,
           ),
-          child: TextFormField(
-            controller: contentController,
-            cursorColor: ThemeApp.trueWhite,
-            style: textTheme.bodyMedium,
-            decoration: InputDecoration(
-              hintText: "Ajoutez des détails utiles (lieu, contacts, notes...)",
-              hintStyle: textTheme.bodyMedium!.copyWith(color: ThemeApp.trueWhite.withValues(alpha: 0.1)),
-              border: InputBorder.none,
-            ),
-            maxLines: null,
-            expands: true,
-            keyboardType: TextInputType.multiline,
-            textInputAction: TextInputAction.newline,
-          ),
+          maxLines: null,
+          keyboardType: TextInputType.multiline,
+          textInputAction: TextInputAction.newline,
         ),
       ],
     );
@@ -205,36 +199,137 @@ class _AddEventControlState extends State<AddEventControl> {
     );
   }
 
-  Widget _buildPickTime() {
-    final textTheme = Theme.of(context).textTheme;
-    return Column(
-      children: [
-      ],
-    );
-  }
+  // Widget _buildPickTime() {
+  //   final textTheme = Theme.of(context).textTheme;
+  //   final primaryColor = Theme.of(context).primaryColor;
+  //
+  //   // Heures de 0 à 23
+  //   final hours = List.generate(24, (index) => index);
+  //   // Minutes avec un pas de 5 (00, 05, 10, ..., 55)
+  //   final minutes = List.generate(12, (index) => index * 5);
+  //
+  //   return Column(
+  //     children: [
+  //       // Affichage de l'heure sélectionnée
+  //       Text(
+  //         '${_selectedHour.toString().padLeft(2, '0')}:${_selectedMinute.toString().padLeft(2, '0')}',
+  //         style: textTheme.headlineMedium?.copyWith(
+  //           color: ThemeApp.trueWhite,
+  //           fontWeight: FontWeight.bold,
+  //         ),
+  //       ),
+  //       SizedBox(height: 20.h),
+  //
+  //       // Sélecteur d'heure
+  //       Row(
+  //         mainAxisAlignment: MainAxisAlignment.center,
+  //         children: [
+  //           // Sélecteur d'heures
+  //           SizedBox(
+  //             width: 80.w,
+  //             child: WheelPicker(
+  //               itemSize: 50,
+  //               children: hours.map((hour) {
+  //                 return Text(
+  //                   hour.toString().padLeft(2, '0'),
+  //                   style: textTheme.titleLarge?.copyWith(
+  //                     color: _selectedHour == hour
+  //                         ? primaryColor
+  //                         : ThemeApp.trueWhite.withOpacity(0.6),
+  //                     fontWeight: _selectedHour == hour
+  //                         ? FontWeight.bold
+  //                         : FontWeight.normal,
+  //                   ),
+  //                 );
+  //               }).toList(),
+  //               onIndexChanged: (index) {
+  //                 setState(() {
+  //                   _selectedHour = hours[index];
+  //                 });
+  //               },
+  //               looping: true,
+  //               perspective: 0.01,
+  //               size: 200,
+  //               squeeze: 1.2,
+  //               diameterRatio: 1.2,
+  //               itemExtent: 50,
+  //               physics: const FixedExtentScrollPhysics(),
+  //             ),
+  //           ),
+  //
+  //           // Deux-points
+  //           Padding(
+  //             padding: EdgeInsets.symmetric(horizontal: 8.w),
+  //             child: Text(
+  //               ':',
+  //               style: textTheme.headlineMedium?.copyWith(
+  //                 color: ThemeApp.trueWhite,
+  //                 fontWeight: FontWeight.bold,
+  //               ),
+  //             ),
+  //           ),
+  //
+  //           // Sélecteur de minutes
+  //           SizedBox(
+  //             width: 80.w,
+  //             child: WheelPicker(
+  //               // itemSize: 50,
+  //               builder: ,
+  //               children: minutes.map((minute) {
+  //                 return Text(
+  //                   minute.toString().padLeft(2, '0'),
+  //                   style: textTheme.titleLarge?.copyWith(
+  //                     color: _selectedMinute == minute
+  //                         ? primaryColor
+  //                         : ThemeApp.trueWhite.withOpacity(0.6),
+  //                     fontWeight: _selectedMinute == minute
+  //                         ? FontWeight.bold
+  //                         : FontWeight.normal,
+  //                   ),
+  //                 );
+  //               }).toList(),
+  //               onIndexChanged: (index) {
+  //                 setState(() {
+  //                   _selectedMinute = minutes[index];
+  //                 });
+  //               },
+  //               looping: true,
+  //               perspective: 0.01,
+  //               size: 200,
+  //               squeeze: 1.2,
+  //               diameterRatio: 1.2,
+  //               itemExtent: 50,
+  //               physics: const FixedExtentScrollPhysics(),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget _buildIndicator() {
     final textTheme = Theme.of(context).textTheme;
-    final isFirstIndex = _pageController.hasClients
-        ? (_pageController.page ?? 0).round() == 0
-        : 0 == 0;
+    final isFirstIndex = _pageController.hasClients ? (_pageController.page ?? 0).round() == 0 : 0 == 0;
     return Row(
       children: [
-        Expanded(  // Pour que la colonne prenne tout l'espace disponible
+        Expanded(
+          // Pour que la colonne prenne tout l'espace disponible
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,  // Alignement à gauche
+            crossAxisAlignment: CrossAxisAlignment.start, // Alignement à gauche
             children: [
               Text(isFirstIndex ? "Jour de l'événement" : "Moment précis", style: textTheme.titleMedium),
-              Text(isFirstIndex ? "Quel jour souhaitez-vous compter ?" : "Précisez l'heure du compte à rebours", style: textTheme.bodySmall!.copyWith(color: ThemeApp.trueWhite.withValues(alpha: 0.8))),
+              Text(
+                isFirstIndex ? "Quel jour souhaitez-vous compter ?" : "Précisez l'heure du compte à rebours",
+                style: textTheme.bodySmall!.copyWith(color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
+              ),
             ],
           ),
         ),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: List.generate(2, (index) {
-            final isActive = _pageController.hasClients
-                ? (_pageController.page ?? 0).round() == index
-                : index == 0;
+            final isActive = _pageController.hasClients ? (_pageController.page ?? 0).round() == index : index == 0;
 
             return GestureDetector(
               onTap: () => _pageController.animateToPage(
@@ -246,19 +341,15 @@ class _AddEventControlState extends State<AddEventControl> {
                 margin: EdgeInsets.symmetric(horizontal: 4.w),
                 child: index == 0
                     ? svgIcon(
-                  path: Assets.calendar1SvgrepoCom,
-                  color: isActive
-                      ? ThemeApp.tropicalIndigo
-                      : ThemeApp.trueWhite.withValues(alpha: 0.4),
-                  size: isActive ? 24 : 18,
-                )
+                        path: Assets.calendar1SvgrepoCom,
+                        color: isActive ? ThemeApp.tropicalIndigo : ThemeApp.trueWhite.withValues(alpha: 0.4),
+                        size: isActive ? 24 : 18,
+                      )
                     : svgIcon(
-                  path: Assets.timeSvgrepoCom,
-                  color: isActive
-                      ? ThemeApp.tropicalIndigo
-                      : ThemeApp.trueWhite.withValues(alpha: 0.4),
-                  size: isActive ? 24 : 18,
-                ),
+                        path: Assets.timeSvgrepoCom,
+                        color: isActive ? ThemeApp.tropicalIndigo : ThemeApp.trueWhite.withValues(alpha: 0.4),
+                        size: isActive ? 24 : 18,
+                      ),
               ),
             );
           }),
