@@ -3,7 +3,6 @@ import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:proto_kairos/models/data/generated/assets.dart";
 import "package:proto_kairos/views/themes/theme_app.dart";
 import "package:proto_kairos/views/utils/svg_util.dart";
-import "package:smooth_page_indicator/smooth_page_indicator.dart";
 import "package:table_calendar/table_calendar.dart";
 import "package:wheel_picker/wheel_picker.dart";
 
@@ -15,6 +14,9 @@ class AddEventControl extends StatefulWidget {
 }
 
 class _AddEventControlState extends State<AddEventControl> {
+  late final WheelPickerController _hoursWheel;
+  late final WheelPickerController _minutesWheel;
+
   final TextEditingController titleController = TextEditingController();
   final TextEditingController contentController = TextEditingController();
   final FocusNode _titleFocusNode = FocusNode();
@@ -22,29 +24,6 @@ class _AddEventControlState extends State<AddEventControl> {
 
   DateTime? selectedDate;
   DateTime? focusedDate;
-  TimeOfDay? _selectedTime;
-
-  Future<void> _selectDate() async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime(2021, 7, 25),
-      firstDate: DateTime(2021),
-      lastDate: DateTime(2022),
-    );
-
-    setState(() {
-      selectedDate = pickedDate;
-    });
-  }
-
-  @override
-  void dispose() {
-    _titleFocusNode.dispose(); // N"oubliez pas de libérer la mémoire
-    titleController.dispose();
-    contentController.dispose();
-    _pageController.dispose();
-    super.dispose();
-  }
 
   @override
   void initState() {
@@ -61,12 +40,25 @@ class _AddEventControlState extends State<AddEventControl> {
         _titleFocusNode.requestFocus();
       }
     });
+
+    final now = TimeOfDay.now();
+    _hoursWheel = WheelPickerController(itemCount: 24, initialIndex: now.hour % 12,);
+    _minutesWheel = WheelPickerController(itemCount: 60, initialIndex: now.minute, mounts: [_hoursWheel]);
+  }
+
+  @override
+  void dispose() {
+    _titleFocusNode.dispose(); // N"oubliez pas de libérer la mémoire
+    titleController.dispose();
+    contentController.dispose();
+    _pageController.dispose();
+    _hoursWheel.dispose();
+    _minutesWheel.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final primaryColor = Theme.of(context).primaryColor;
     return Column(
       children: [
         // Formulaire de texte
@@ -199,114 +191,68 @@ class _AddEventControlState extends State<AddEventControl> {
     );
   }
 
-  // Widget _buildPickTime() {
-  //   final textTheme = Theme.of(context).textTheme;
-  //   final primaryColor = Theme.of(context).primaryColor;
-  //
-  //   // Heures de 0 à 23
-  //   final hours = List.generate(24, (index) => index);
-  //   // Minutes avec un pas de 5 (00, 05, 10, ..., 55)
-  //   final minutes = List.generate(12, (index) => index * 5);
-  //
-  //   return Column(
-  //     children: [
-  //       // Affichage de l'heure sélectionnée
-  //       Text(
-  //         '${_selectedHour.toString().padLeft(2, '0')}:${_selectedMinute.toString().padLeft(2, '0')}',
-  //         style: textTheme.headlineMedium?.copyWith(
-  //           color: ThemeApp.trueWhite,
-  //           fontWeight: FontWeight.bold,
-  //         ),
-  //       ),
-  //       SizedBox(height: 20.h),
-  //
-  //       // Sélecteur d'heure
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.center,
-  //         children: [
-  //           // Sélecteur d'heures
-  //           SizedBox(
-  //             width: 80.w,
-  //             child: WheelPicker(
-  //               itemSize: 50,
-  //               children: hours.map((hour) {
-  //                 return Text(
-  //                   hour.toString().padLeft(2, '0'),
-  //                   style: textTheme.titleLarge?.copyWith(
-  //                     color: _selectedHour == hour
-  //                         ? primaryColor
-  //                         : ThemeApp.trueWhite.withOpacity(0.6),
-  //                     fontWeight: _selectedHour == hour
-  //                         ? FontWeight.bold
-  //                         : FontWeight.normal,
-  //                   ),
-  //                 );
-  //               }).toList(),
-  //               onIndexChanged: (index) {
-  //                 setState(() {
-  //                   _selectedHour = hours[index];
-  //                 });
-  //               },
-  //               looping: true,
-  //               perspective: 0.01,
-  //               size: 200,
-  //               squeeze: 1.2,
-  //               diameterRatio: 1.2,
-  //               itemExtent: 50,
-  //               physics: const FixedExtentScrollPhysics(),
-  //             ),
-  //           ),
-  //
-  //           // Deux-points
-  //           Padding(
-  //             padding: EdgeInsets.symmetric(horizontal: 8.w),
-  //             child: Text(
-  //               ':',
-  //               style: textTheme.headlineMedium?.copyWith(
-  //                 color: ThemeApp.trueWhite,
-  //                 fontWeight: FontWeight.bold,
-  //               ),
-  //             ),
-  //           ),
-  //
-  //           // Sélecteur de minutes
-  //           SizedBox(
-  //             width: 80.w,
-  //             child: WheelPicker(
-  //               // itemSize: 50,
-  //               builder: ,
-  //               children: minutes.map((minute) {
-  //                 return Text(
-  //                   minute.toString().padLeft(2, '0'),
-  //                   style: textTheme.titleLarge?.copyWith(
-  //                     color: _selectedMinute == minute
-  //                         ? primaryColor
-  //                         : ThemeApp.trueWhite.withOpacity(0.6),
-  //                     fontWeight: _selectedMinute == minute
-  //                         ? FontWeight.bold
-  //                         : FontWeight.normal,
-  //                   ),
-  //                 );
-  //               }).toList(),
-  //               onIndexChanged: (index) {
-  //                 setState(() {
-  //                   _selectedMinute = minutes[index];
-  //                 });
-  //               },
-  //               looping: true,
-  //               perspective: 0.01,
-  //               size: 200,
-  //               squeeze: 1.2,
-  //               diameterRatio: 1.2,
-  //               itemExtent: 50,
-  //               physics: const FixedExtentScrollPhysics(),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ],
-  //   );
-  // }
+  Widget _buildPickTime() {
+    final textTheme = Theme.of(context).textTheme;
+    final primaryColor = Theme.of(context).primaryColor;
+    final now = TimeOfDay.now();
+
+    final wheelStyle = WheelPickerStyle(
+      itemExtent: textTheme.headlineLarge!.fontSize! * textTheme.headlineLarge!.height!,
+      // Text height
+      squeeze: 1.15,
+      diameterRatio: .8,
+      surroundingOpacity: .25,
+      magnification: 1.2,
+    );
+
+    Widget itemBuilder(BuildContext context, int index) {
+      return Text("$index".padLeft(2, '0'), style: textTheme.headlineLarge?.copyWith(color: ThemeApp.trueWhite));
+    }
+
+    final timeWheels = <Widget>[
+      for (final wheelController in [_hoursWheel, _minutesWheel])
+        Expanded(
+          child: WheelPicker(
+            builder: itemBuilder,
+            controller: wheelController,
+            looping: wheelController == _hoursWheel || wheelController == _minutesWheel,
+            style: wheelStyle,
+            selectedIndexColor: ThemeApp.tropicalIndigo,
+          ),
+        ),
+    ];
+    timeWheels.insert(1, Text(":", style: textTheme.headlineLarge?.copyWith(color: ThemeApp.trueWhite)));
+
+
+    return Center(
+      child: SizedBox(
+        width: 200.0.h,
+        height: 200.0.h,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            _centerBar(context),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 40.0.w),
+              child: Row(children: [...timeWheels,]),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _centerBar(BuildContext context) {
+    return Center(
+      child: Container(
+        height: 32.0.h,
+        decoration: BoxDecoration(
+          color: ThemeApp.trueWhite.withValues(alpha: 0.04),
+          borderRadius: BorderRadius.circular(8.0.r),
+        ),
+      ),
+    );
+  }
 
   Widget _buildIndicator() {
     final textTheme = Theme.of(context).textTheme;
