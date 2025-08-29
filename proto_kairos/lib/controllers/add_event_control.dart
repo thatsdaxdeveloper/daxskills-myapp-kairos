@@ -5,6 +5,7 @@ import "package:intl/intl.dart";
 import "package:proto_kairos/models/data/generated/assets.dart";
 import "package:proto_kairos/views/themes/theme_app.dart";
 import "package:proto_kairos/views/utils/svg_util.dart";
+import "package:proto_kairos/views/widgets/my_expanded_button.dart";
 import "package:table_calendar/table_calendar.dart";
 import "package:wheel_picker/wheel_picker.dart";
 
@@ -22,6 +23,7 @@ class _AddEventControlState extends State<AddEventControl> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController contentController = TextEditingController();
   final FocusNode _titleFocusNode = FocusNode();
+  final FocusNode _contentFocusNode = FocusNode();
   final PageController _pageController = PageController();
 
   DateTime? selectedDate;
@@ -44,7 +46,7 @@ class _AddEventControlState extends State<AddEventControl> {
     });
 
     final now = TimeOfDay.now();
-    _hoursWheel = WheelPickerController(itemCount: 24, initialIndex: now.hour % 12,);
+    _hoursWheel = WheelPickerController(itemCount: 24, initialIndex: now.hour);
     _minutesWheel = WheelPickerController(itemCount: 60, initialIndex: now.minute, mounts: [_hoursWheel]);
 
     initializeDateFormatting('fr_FR', null);
@@ -52,12 +54,15 @@ class _AddEventControlState extends State<AddEventControl> {
 
   @override
   void dispose() {
-    _titleFocusNode.dispose(); // N"oubliez pas de libérer la mémoire
+    _titleFocusNode.dispose();
     titleController.dispose();
     contentController.dispose();
+    _contentFocusNode.dispose();
     _pageController.dispose();
+
     _hoursWheel.dispose();
     _minutesWheel.dispose();
+
     super.dispose();
   }
 
@@ -90,6 +95,7 @@ class _AddEventControlState extends State<AddEventControl> {
         TextFormField(
           controller: titleController,
           focusNode: _titleFocusNode,
+          textCapitalization: TextCapitalization.sentences,
           style: textTheme.headlineLarge,
           cursorColor: ThemeApp.trueWhite,
           decoration: InputDecoration(
@@ -100,33 +106,30 @@ class _AddEventControlState extends State<AddEventControl> {
             isDense: true,
           ),
           maxLines: null,
-          // Permet plusieurs lignes
           keyboardType: TextInputType.multiline,
           textInputAction: TextInputAction.next,
           onFieldSubmitted: (_) {
-            // Passe au champ suivant (contenu) quand on appuie sur entrée
-            FocusScope.of(context).nextFocus();
+            FocusScope.of(context).requestFocus(_contentFocusNode);
           },
         ),
 
         // Champ de contenu
-        SizedBox(
-          height: 40.h,
-          child: TextFormField(
-            controller: contentController,
-            cursorColor: ThemeApp.trueWhite,
-            style: textTheme.bodyMedium,
-            decoration: InputDecoration(
-              hintText: "Ajoutez des détails utiles (lieu, contacts, notes...)",
-              hintStyle: textTheme.bodyMedium!.copyWith(color: ThemeApp.trueWhite.withValues(alpha: 0.1)),
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.zero,
-              isDense: true,
-            ),
-            maxLines: null,
-            keyboardType: TextInputType.multiline,
-            textInputAction: TextInputAction.newline,
+        TextFormField(
+          controller: contentController,
+          focusNode: _contentFocusNode,
+          textCapitalization: TextCapitalization.sentences,
+          cursorColor: ThemeApp.trueWhite,
+          style: textTheme.bodyMedium,
+          decoration: InputDecoration(
+            hintText: "Ajoutez des détails utiles (lieu, contacts, notes...)",
+            hintStyle: textTheme.bodyMedium!.copyWith(color: ThemeApp.trueWhite.withValues(alpha: 0.1)),
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.zero,
+            isDense: true,
           ),
+          maxLines: null,
+          keyboardType: TextInputType.multiline,
+          textInputAction: TextInputAction.newline,
         ),
       ],
     );
@@ -198,28 +201,8 @@ class _AddEventControlState extends State<AddEventControl> {
     );
   }
 
-  String _getFormattedTime() {
-    final hours = _hoursWheel.selected.toString().padLeft(2, '0');
-    final minutes = _minutesWheel.selected.toString().padLeft(2, '0');
-    return '$hours:$minutes';
-  }
-
-  Map<String, String> _getDateComponents() {
-    final date = selectedDate ?? focusedDate ?? DateTime.now();
-    String capitalize(String s) => s[0].toUpperCase() + s.substring(1).toLowerCase();
-    return {
-      "weekDay": capitalize(DateFormat('EEEE', 'fr_FR').format(date)),
-      "day": date.day.toString(),
-      "month": capitalize(DateFormat('MMMM', 'fr_FR').format(date)),
-      "year": date.year.toString(),
-    };
-  }
-
   Widget _buildPickTime() {
     final textTheme = Theme.of(context).textTheme;
-    final primaryColor = Theme.of(context).primaryColor;
-    final now = TimeOfDay.now();
-
     final wheelStyle = WheelPickerStyle(
       itemExtent: textTheme.headlineLarge!.fontSize! * textTheme.headlineLarge!.height!,
       // Text height
@@ -247,10 +230,9 @@ class _AddEventControlState extends State<AddEventControl> {
     ];
     timeWheels.insert(1, Text(":", style: textTheme.headlineLarge?.copyWith(color: ThemeApp.trueWhite)));
 
-    final dateComponents = _getDateComponents();
-
     return Column(
       children: [
+        SizedBox(height: 30.h),
         Center(
           child: SizedBox(
             width: 200.0.h,
@@ -261,92 +243,52 @@ class _AddEventControlState extends State<AddEventControl> {
                 _centerBar(context),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 40.0.w),
-                  child: Row(children: [...timeWheels,]),
+                  child: Row(children: [...timeWheels]),
                 ),
               ],
             ),
           ),
         ),
-
-        SizedBox(height: 40.h),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text("Momento Kairos", style: textTheme.titleSmall),
-          ],
-        ),
-        SizedBox(height: 10.h),
-        _buildDate(
-          weekDay: dateComponents["weekDay"]!,
-          day: dateComponents["day"]!,
-          month: dateComponents["month"]!,
-          year: dateComponents["year"]!,
+        SizedBox(height: 50.h),
+        MyExpandedButton(
+          text: "Ajouter",
+          onTap: titleController.text.trim().isNotEmpty ? _addEvent : null,
+          opacity: titleController.text.trim().isNotEmpty ? 1.0 : 0.2,
         ),
       ],
     );
   }
 
-  Widget _buildDate({required String weekDay, required String day, required String month,required String year}) {
-    final textTheme = Theme.of(context).textTheme;
-    return SizedBox(
-      height: 80.h,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Date
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Jour
-              Text(weekDay,
-                  style: textTheme.bodyMedium!.copyWith(
-                      color: ThemeApp.trueWhite.withValues(alpha: 0.4),
-                      letterSpacing: 1,
-                      fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 4.h),
+  void _addEvent() {
+    FocusScope.of(context).unfocus();
 
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(day, style: textTheme.displayLarge!.copyWith(fontSize: 80, height: 0.9)),
-
-                  SizedBox(width: 10.w),
-
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(month, style: textTheme.bodyMedium!.copyWith(color: ThemeApp.trueWhite, fontWeight: FontWeight.bold)),
-                      SizedBox(width: 10.h),
-
-                      Text(year, style: textTheme.bodyMedium!.copyWith(color: ThemeApp.trueWhite, fontWeight: FontWeight.bold)),
-                    ],
-                  ),
-                ],
-              )
-            ],
-          ),
-
-          VerticalDivider(
-            color: ThemeApp.trueWhite.withValues(alpha: 0.2),
-            thickness: 2.w,
-            width: 50.w,
-          ),
-
-          // Heure
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 30.h),
-              Text("UTC", style: textTheme.bodySmall!.copyWith(color: ThemeApp.trueWhite.withValues(alpha: 0.4), fontWeight: FontWeight.bold),),
-              Text("23:59", style: textTheme.displayMedium)
-            ],
-          )
-        ],
-      ),
+    final selectedDateTime = DateTime(
+      selectedDate!.year,
+      selectedDate!.month,
+      selectedDate!.day,
+      _hoursWheel.selected,
+      _minutesWheel.selected,
     );
+
+    // Afficher les informations
+    print("Titre: ${titleController.text}");
+    print("Description: ${contentController.text}");
+    print("Date complète: $selectedDateTime");
+    print("Date formatée: ${DateFormat('dd/MM/yyyy HH:mm').format(selectedDateTime)}");
+    print(
+      "Heure: ${_hoursWheel.selected.toString().padLeft(2, '0')}:${_minutesWheel.selected.toString().padLeft(2, '0')}",
+    );
+
+    titleController.clear();
+    contentController.clear();
+
+    _pageController.jumpToPage(0);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _titleFocusNode.requestFocus();
+      }
+    });
   }
 
   Widget _centerBar(BuildContext context) {
@@ -388,10 +330,10 @@ class _AddEventControlState extends State<AddEventControl> {
               onTap: () {
                 FocusScope.of(context).unfocus();
                 _pageController.animateToPage(
-                index,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-              );
+                  index,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
               },
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 4.w),

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:proto_kairos/models/data/generated/assets.dart';
 import 'package:proto_kairos/views/themes/theme_app.dart';
 import 'package:proto_kairos/views/utils/svg_util.dart';
+import 'package:proto_kairos/views/widgets/my_expanded_button.dart';
 import 'package:proto_kairos/views/widgets/my_primary_button.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -25,27 +26,27 @@ class OnboardingPage extends StatelessWidget {
           TextSpan(
             style: Theme.of(
               context,
-            ).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
+            ).textTheme.bodyLarge!.copyWith(fontSize: 16.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
             text: "Ne perdez plus de vue ",
             children: [
               TextSpan(
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 20.sp, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold),
                 text: "les dates clés.",
               ),
               TextSpan(
                 style: Theme.of(
                   context,
-                ).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
+                ).textTheme.bodyLarge!.copyWith(fontSize: 16.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
                 text: " Gardez tous ",
               ),
               TextSpan(
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 20.sp, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold),
                 text: "vos événements importants ",
               ),
               TextSpan(
                 style: Theme.of(
                   context,
-                ).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
+                ).textTheme.bodyLarge!.copyWith(fontSize: 16.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
                 text: "à portée de main.",
               ),
             ],
@@ -58,33 +59,33 @@ class OnboardingPage extends StatelessWidget {
         title: "Suivi en  temps réel",
         description: [
           TextSpan(
-            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 20.sp, fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold),
             text: "Visualisez le temps restant ",
             children: [
               TextSpan(
                 style: Theme.of(
                   context,
-                ).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
+                ).textTheme.bodyLarge!.copyWith(fontSize: 16.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
                 text: "précisément, ",
               ),
               TextSpan(
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 20.sp, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold),
                 text: "jusqu'à la seconde",
               ),
               TextSpan(
                 style: Theme.of(
                   context,
-                ).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
+                ).textTheme.bodyLarge!.copyWith(fontSize: 16.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
                 text: ", pour ",
               ),
               TextSpan(
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 20.sp, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold),
                 text: "chaque objectif",
               ),
               TextSpan(
                 style: Theme.of(
                   context,
-                ).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
+                ).textTheme.bodyLarge!.copyWith(fontSize: 16.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
                 text: ".",
               ),
             ],
@@ -97,23 +98,23 @@ class OnboardingPage extends StatelessWidget {
         title: "Restez focalisé",
         description: [
           TextSpan(
-            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 20.sp, fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold),
             text: "Concentrez-vous sur l'essentiel ",
             children: [
               TextSpan(
                 style: Theme.of(
                   context,
-                ).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
+                ).textTheme.bodyLarge!.copyWith(fontSize: 16.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
                 text: "en laissant ",
               ),
               TextSpan(
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 20.sp, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold),
                 text: "Kairos ",
               ),
               TextSpan(
                 style: Theme.of(
                   context,
-                ).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
+                ).textTheme.bodyLarge!.copyWith(fontSize: 16.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
                 text: "le compte à rebours.",
               ),
             ],
@@ -137,37 +138,18 @@ class OnboardingPage extends StatelessWidget {
           ),
 
           // Bouton de navigation
-          Align(
-            alignment: Alignment(0, 0.9),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Bouton de navigation
-                MyPrimaryButton(onTap: () => context.go('/home'), text: "Continuer"),
-                SizedBox(width: 20.w),
-                // Bientot disponible
-                SizedBox(
-                  width: 140.w,
-                  child: RichText(
-                    text: TextSpan(
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        fontSize: 12.sp,
-                        color: ThemeApp.trueWhite,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      text: "Synchronisation des données ",
-                      children: [
-                        TextSpan(
-                          style: Theme.of(
-                            context,
-                          ).textTheme.bodySmall!.copyWith(fontSize: 12.sp, color: ThemeApp.trueWhite),
-                          text: "bientôt disponible.",
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+          SafeArea(
+            child: Align(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  // Bouton de navigation
+                  MyExpandedButton(onTap: () => context.go('/home'), text: "Continuer"),
+                  SizedBox(height:4.h),
+                  // Bientot disponible
+                  Text("La synchronisation des données sera bientôt disponible.", style: Theme.of(context).textTheme.labelSmall!.copyWith(color: ThemeApp.trueWhite.withValues(alpha: 0.8)),),
+                ],
+              ),
             ),
           ),
         ],

@@ -22,7 +22,7 @@ class MyPrimaryButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(20.r),
         ),
         child: Center(
-          child: Text(text, style: Theme.of(context).textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold)),
+          child: Text(text, style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold)),
         ),
       ),
     );
