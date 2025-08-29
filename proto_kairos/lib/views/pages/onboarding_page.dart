@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:proto_kairos/controllers/preferences/auth_pref.dart';
+import 'package:proto_kairos/controllers/providers/onboarding_provider.dart';
 import 'package:proto_kairos/models/data/generated/assets.dart';
 import 'package:proto_kairos/views/themes/theme_app.dart';
 import 'package:proto_kairos/views/utils/svg_util.dart';
 import 'package:proto_kairos/views/widgets/my_expanded_button.dart';
 import 'package:proto_kairos/views/widgets/my_primary_button.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingPage extends StatelessWidget {
@@ -21,6 +24,7 @@ class OnboardingPage extends StatelessWidget {
     final List<Widget> pages = [
       _onboardingContent(
         context: context,
+        isFirstPage: true,
         title: "Centralisez vos attentes",
         description: [
           TextSpan(
@@ -127,7 +131,6 @@ class OnboardingPage extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // Indicateur de page
           Align(alignment: Alignment(0, -0.86), child: _buildPageIndicator(context)),
 
           PageView.builder(
@@ -144,7 +147,10 @@ class OnboardingPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   // Bouton de navigation
-                  MyExpandedButton(onTap: () => context.go('/home'), text: "Continuer"),
+                  MyExpandedButton(onTap: () async {
+                    context.go('/home');
+                    context.read<OnboardingProvider>().putOnboardingCompleted(true);
+                  }, text: "Continuer"),
                   SizedBox(height:4.h),
                   // Bientot disponible
                   Text("La synchronisation des données sera bientôt disponible.", style: Theme.of(context).textTheme.labelSmall!.copyWith(color: ThemeApp.trueWhite.withValues(alpha: 0.8)),),
@@ -162,6 +168,7 @@ class OnboardingPage extends StatelessWidget {
     required String title,
     required List<TextSpan> description,
     required String imagePath,
+    bool isFirstPage = false,
   }) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return Padding(
@@ -182,7 +189,7 @@ class OnboardingPage extends StatelessWidget {
 
           // Description du onboarding
           Align(
-            alignment: Alignment(-1, 0.6),
+            alignment: Alignment(-1, isFirstPage ? 0.6 : 0.55),
             child: RichText(text: TextSpan(children: description)),
           ),
         ],
