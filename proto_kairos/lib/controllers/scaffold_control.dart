@@ -17,9 +17,24 @@ class _ScaffoldControlState extends State<ScaffoldControl> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size(1.sw, 30.h),
+        child: Align(
+          alignment: Alignment(0.9, 0.6),
+          child: GestureDetector(
+            onTap: () => context.push('/home/add'),
+            child: Text(
+              "Ajouter un événement",
+              style: Theme.of(
+                context,
+              ).textTheme.titleSmall!.copyWith(color: ThemeApp.tropicalIndigo, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+      ),
       body: HomePage(),
-      floatingActionButton: _buildFloatingActionButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      // floatingActionButton: _buildFloatingActionButton(),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 

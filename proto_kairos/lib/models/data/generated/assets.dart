@@ -7,7 +7,9 @@ class Assets {
   static const String calendar1SvgrepoCom = 'assets/icons/calendar-1-svgrepo-com.svg';
   static const String chevronLeftSquareSvgrepoCom = 'assets/icons/chevron-left-square-svgrepo-com.svg';
   static const String chevronRightSquareSvgrepoCom = 'assets/icons/chevron-right-square-svgrepo-com.svg';
+  static const String chevronRightSvgrepoCom = 'assets/icons/chevron-right-svgrepo-com.svg';
   static const String eventsCalendar = 'assets/illustrations/events-calendar.svg';
+  static const String noData = 'assets/illustrations/no-data.svg';
   static const String plusSvgrepoCom = 'assets/icons/plus-svgrepo-com.svg';
   static const String target = 'assets/illustrations/target.svg';
   static const String timeManagement = 'assets/illustrations/time-management.svg';

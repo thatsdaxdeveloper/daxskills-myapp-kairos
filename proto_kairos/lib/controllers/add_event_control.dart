@@ -1,11 +1,13 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:intl/date_symbol_data_local.dart";
-import "package:intl/intl.dart";
+import "package:proto_kairos/controllers/providers/countdown_provider.dart";
 import "package:proto_kairos/models/data/generated/assets.dart";
+import "package:proto_kairos/models/entities/countdown_entity.dart";
 import "package:proto_kairos/views/themes/theme_app.dart";
 import "package:proto_kairos/views/utils/svg_util.dart";
 import "package:proto_kairos/views/widgets/my_expanded_button.dart";
+import "package:provider/provider.dart";
 import "package:table_calendar/table_calendar.dart";
 import "package:wheel_picker/wheel_picker.dart";
 
@@ -129,7 +131,7 @@ class _AddEventControlState extends State<AddEventControl> {
           ),
           maxLines: null,
           keyboardType: TextInputType.multiline,
-          textInputAction: TextInputAction.newline,
+          textInputAction: TextInputAction.done,
         ),
       ],
     );
@@ -259,36 +261,47 @@ class _AddEventControlState extends State<AddEventControl> {
     );
   }
 
-  void _addEvent() {
-    FocusScope.of(context).unfocus();
+  void _addEvent() async {
+    try {
+      FocusScope.of(context).unfocus();
 
-    final selectedDateTime = DateTime(
-      selectedDate!.year,
-      selectedDate!.month,
-      selectedDate!.day,
-      _hoursWheel.selected,
-      _minutesWheel.selected,
-    );
+      if (selectedDate == null) {
+        print("Erreur: Aucune date sélectionnée");
+        selectedDate = DateTime.now();
+      }
 
-    // Afficher les informations
-    print("Titre: ${titleController.text}");
-    print("Description: ${contentController.text}");
-    print("Date complète: $selectedDateTime");
-    print("Date formatée: ${DateFormat('dd/MM/yyyy HH:mm').format(selectedDateTime)}");
-    print(
-      "Heure: ${_hoursWheel.selected.toString().padLeft(2, '0')}:${_minutesWheel.selected.toString().padLeft(2, '0')}",
-    );
+      final selectedDateTime = DateTime(
+        selectedDate!.year,
+        selectedDate!.month,
+        selectedDate!.day,
+        _hoursWheel.selected,
+        _minutesWheel.selected,
+      );
 
-    titleController.clear();
-    contentController.clear();
+      final newCountdown = CountdownEntity(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        title: titleController.text,
+        description: contentController.text,
+        targetDate: selectedDateTime,
+      );
 
-    _pageController.jumpToPage(0);
+      context.read<CountdownProvider>().addCountdown(newCountdown);
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+      titleController.clear();
+      contentController.clear();
+      _pageController.jumpToPage(0);
+
       if (mounted) {
         _titleFocusNode.requestFocus();
       }
-    });
+    } catch (e) {
+      print("Erreur dans _addEvent: $e");
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Erreur: ${e.toString()}")),
+        );
+      }
+    }
   }
 
   Widget _centerBar(BuildContext context) {
