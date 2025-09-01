@@ -28,20 +28,7 @@ class HomePage extends StatelessWidget {
     return Consumer<CountdownProvider>(
       builder: (context, countdownProvider, _) {
         if (countdownProvider.countdowns.isEmpty) {
-          return Stack(
-            children: [
-              Align(
-                  alignment: Alignment(0, -0.1),
-
-                  child: svgImage(path: Assets.noData, height: 120)),
-              Align(
-                alignment: Alignment(0.2, -0.04),
-                child: SizedBox(
-                    width: 80.w,
-                    child: Text("Aucun événement", style: Theme.of(context).textTheme.titleSmall!.copyWith(color: ThemeApp.eerieBlack, fontWeight: FontWeight.bold), textAlign: TextAlign.center,)),
-              ),
-            ],
-          );
+          return Center(child: Text("Aucun événement programmé", style: Theme.of(context).textTheme.titleMedium));
         }
 
         // Grouper les événements par mois/année
@@ -68,20 +55,35 @@ class HomePage extends StatelessWidget {
             final date = firstEvent.targetDate;
             final monthName = _getMonthName(date.month);
 
+            final filteredAndSortedEvents = events.where((event) => event.targetDate.month == date.month).toList()
+              ..sort((a, b) => a.targetDate.compareTo(b.targetDate));
+
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // En-tête du mois/année
-                Text(
-                  monthName,
-                  style: Theme.of(context).textTheme.displayMedium!.copyWith(
-                    fontSize: 48.sp,
-                    color: ThemeApp.trueWhite.withValues(alpha: 0.1),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      monthName,
+                      style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                        fontSize: 48.sp,
+                        color: ThemeApp.trueWhite.withValues(alpha: 0.1),
+                      ),
+                    ),
+                    Text(
+                      date.year.toString(),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.labelLarge!.copyWith(color: ThemeApp.trueWhite.withValues(alpha: 0.1)),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 10.h),
                 // Liste des événements du mois
-                ...events.map(
+                ...filteredAndSortedEvents.map(
                   (event) => _buildCountdownTile(
                     title: event.title,
                     day: event.targetDate.day.toString().padLeft(2, "0"),

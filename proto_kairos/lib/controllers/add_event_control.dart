@@ -1,6 +1,8 @@
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:intl/date_symbol_data_local.dart";
+import "package:intl/intl.dart";
 import "package:proto_kairos/controllers/providers/countdown_provider.dart";
 import "package:proto_kairos/models/data/generated/assets.dart";
 import "package:proto_kairos/models/entities/countdown_entity.dart";
@@ -30,11 +32,13 @@ class _AddEventControlState extends State<AddEventControl> {
 
   DateTime? selectedDate;
   DateTime? focusedDate;
+  TimeOfDay? selectedTime;
 
   @override
   void initState() {
     super.initState();
     focusedDate = DateTime.now();
+    selectedTime = TimeOfDay.now();
 
     _pageController.addListener(() {
       if (mounted) setState(() {});
@@ -82,7 +86,14 @@ class _AddEventControlState extends State<AddEventControl> {
         SizedBox(height: 20.h),
         SizedBox(
           height: 360.h,
-          child: PageView(controller: _pageController, children: [_buildPickDate(), _buildPickTime()]),
+          child: PageView(
+            controller: _pageController,
+            physics: const NeverScrollableScrollPhysics(),
+            children: [_buildPickDate(), _buildPickTime()],
+            onPageChanged: (index) {
+              setState(() {});
+            },
+          ),
         ),
       ],
     );
@@ -145,10 +156,9 @@ class _AddEventControlState extends State<AddEventControl> {
     return Padding(
       padding: EdgeInsets.all(12.w),
       child: TableCalendar(
-        firstDay: now.subtract(const Duration(days: 365 * 5)),
-        // 5 ans en arrière
+        locale: "fr_FR",
+        firstDay: now,
         lastDay: now.add(const Duration(days: 365 * 5)),
-        // 5 ans en avant
         focusedDay: focusedDate ?? now,
         calendarFormat: CalendarFormat.month,
         startingDayOfWeek: StartingDayOfWeek.monday,
@@ -158,6 +168,10 @@ class _AddEventControlState extends State<AddEventControl> {
         headerStyle: HeaderStyle(
           formatButtonVisible: false,
           titleCentered: true,
+          titleTextFormatter: (date, locale) {
+            final monthName = DateFormat.MMMM('fr_FR').format(date);
+            return '${monthName[0].toUpperCase()}${monthName.substring(1)} ${date.year}';
+          },
           titleTextStyle: textTheme.titleMedium!.copyWith(color: ThemeApp.trueWhite, fontWeight: FontWeight.bold),
           leftChevronIcon: svgIcon(path: Assets.chevronLeftSquareSvgrepoCom),
           rightChevronIcon: svgIcon(path: Assets.chevronRightSquareSvgrepoCom),
@@ -176,6 +190,10 @@ class _AddEventControlState extends State<AddEventControl> {
           selectedTextStyle: textTheme.titleLarge!,
           defaultDecoration: BoxDecoration(color: ThemeApp.trueWhite.withValues(alpha: 0.03)),
           weekendDecoration: BoxDecoration(color: ThemeApp.trueWhite.withValues(alpha: 0.03)),
+          disabledTextStyle: textTheme.bodyMedium!.copyWith(color: ThemeApp.trueWhite.withValues(alpha: 0.2)),
+          disabledDecoration: BoxDecoration(
+            color: ThemeApp.trueWhite.withValues(alpha: 1),
+          )
         ),
 
         daysOfWeekStyle: DaysOfWeekStyle(
@@ -189,11 +207,12 @@ class _AddEventControlState extends State<AddEventControl> {
         ),
 
         onDaySelected: (selectedDay, focusedDay) {
-          setState(() {
-            selectedDate = selectedDay;
-            focusedDate = focusedDay;
-            // Vous pouvez ajouter ici la logique pour gérer la sélection
-          });
+          if (!isSameDay(selectedDate, selectedDay)) {
+            setState(() {
+              selectedDate = selectedDay;
+              focusedDate = focusedDay;
+            });
+          }
         },
 
         selectedDayPredicate: (day) {
@@ -227,6 +246,7 @@ class _AddEventControlState extends State<AddEventControl> {
             looping: wheelController == _hoursWheel || wheelController == _minutesWheel,
             style: wheelStyle,
             selectedIndexColor: ThemeApp.tropicalIndigo,
+            onIndexChanged: (index, interactionType) => setState(() {}),
           ),
         ),
     ];
@@ -266,7 +286,9 @@ class _AddEventControlState extends State<AddEventControl> {
       FocusScope.of(context).unfocus();
 
       if (selectedDate == null) {
-        print("Erreur: Aucune date sélectionnée");
+        if (kDebugMode) {
+          print("Erreur: Aucune date sélectionnée");
+        }
         selectedDate = DateTime.now();
       }
 
@@ -295,11 +317,11 @@ class _AddEventControlState extends State<AddEventControl> {
         _titleFocusNode.requestFocus();
       }
     } catch (e) {
-      print("Erreur dans _addEvent: $e");
+      if (kDebugMode) {
+        print("Erreur dans _addEvent: $e");
+      }
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Erreur: ${e.toString()}")),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Erreur: ${e.toString()}")));
       }
     }
   }
@@ -342,6 +364,7 @@ class _AddEventControlState extends State<AddEventControl> {
             return GestureDetector(
               onTap: () {
                 FocusScope.of(context).unfocus();
+
                 _pageController.animateToPage(
                   index,
                   duration: const Duration(milliseconds: 300),
