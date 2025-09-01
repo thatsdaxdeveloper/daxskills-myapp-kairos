@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:proto_kairos/controllers/add_event_control.dart';
+import 'package:proto_kairos/controllers/edit_event_control.dart';
 import 'package:proto_kairos/models/data/generated/assets.dart';
 import 'package:proto_kairos/views/utils/svg_util.dart';
 
-class AddEventPage extends StatelessWidget {
-  const AddEventPage({super.key});
+class EditEventPage extends StatelessWidget {
+  const EditEventPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +28,14 @@ class AddEventPage extends StatelessWidget {
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Nouvel événement", style: textTheme.headlineMedium),
-              Text("Créez un nouveau compte à rebours", style: textTheme.labelMedium),
+              Text("Modifier l'événemen", style: textTheme.headlineMedium),
+              Text("Ajustez les détails de votre compte à rebours", style: textTheme.labelMedium),
             ],
           ),
         ),
         body: Padding(
           padding: EdgeInsetsGeometry.symmetric(vertical: 20.h, horizontal: 10.w),
-          child: SingleChildScrollView(child: AddEventControl()),
+          child: SingleChildScrollView(child: EditEventControl()),
         ),
       ),
     );

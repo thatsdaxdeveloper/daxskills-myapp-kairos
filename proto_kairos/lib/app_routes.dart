@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:proto_kairos/controllers/providers/onboarding_provider.dart';
 import 'package:proto_kairos/controllers/scaffold_control.dart';
 import 'package:proto_kairos/views/pages/acting_pages/add_event_page.dart';
+import 'package:proto_kairos/views/pages/acting_pages/edit_event_page.dart';
 import 'package:proto_kairos/views/pages/onboarding_page.dart';
 import 'package:provider/provider.dart';
 
@@ -30,6 +31,10 @@ final appRouter = GoRouter(
       path: '/home/add',
       pageBuilder: (context, state) => buildFadeTransitionPage(const AddEventPage()),
     ),
+    GoRoute(
+      path: '/home/edit',
+      pageBuilder: (context, state) => buildFadeTransitionPage(const EditEventPage()),
+    )
   ],
 );
 

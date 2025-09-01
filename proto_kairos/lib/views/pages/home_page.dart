@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:go_router/go_router.dart";
 import "package:proto_kairos/controllers/providers/countdown_provider.dart";
 import "package:proto_kairos/models/data/generated/assets.dart";
 import "package:proto_kairos/views/themes/theme_app.dart";
@@ -128,6 +129,7 @@ class HomePage extends StatelessWidget {
         final textTheme = Theme.of(context).textTheme;
 
         return GestureDetector(
+          onTap: () => context.push('/home/edit'),
           child: Container(
             width: 1.sw,
             margin: EdgeInsets.only(bottom: 20.h),
