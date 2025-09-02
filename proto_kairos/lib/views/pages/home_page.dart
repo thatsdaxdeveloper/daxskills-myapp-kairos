@@ -131,7 +131,7 @@ class HomePage extends StatelessWidget {
         final textTheme = Theme.of(context).textTheme;
 
         return GestureDetector(
-          onTap: () => context.push('/home/edit', extra: {"eventId": eventId}),
+          onTap: () => context.push('/home/detail', extra: {"eventId": eventId}),
           child: Container(
             width: 1.sw,
             margin: EdgeInsets.only(bottom: 20.h),

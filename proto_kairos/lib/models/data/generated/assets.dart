@@ -8,6 +8,7 @@ class Assets {
   static const String chevronLeftSquareSvgrepoCom = 'assets/icons/chevron-left-square-svgrepo-com.svg';
   static const String chevronRightSquareSvgrepoCom = 'assets/icons/chevron-right-square-svgrepo-com.svg';
   static const String chevronRightSvgrepoCom = 'assets/icons/chevron-right-svgrepo-com.svg';
+  static const String editSvgrepoCom = 'assets/icons/edit-svgrepo-com.svg';
   static const String eventsCalendar = 'assets/illustrations/events-calendar.svg';
   static const String noData = 'assets/illustrations/no-data.svg';
   static const String plusSvgrepoCom = 'assets/icons/plus-svgrepo-com.svg';

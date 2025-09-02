@@ -4,6 +4,7 @@ import 'package:proto_kairos/controllers/providers/onboarding_provider.dart';
 import 'package:proto_kairos/controllers/scaffold_control.dart';
 import 'package:proto_kairos/views/pages/acting_pages/add_event_page.dart';
 import 'package:proto_kairos/views/pages/acting_pages/edit_event_page.dart';
+import 'package:proto_kairos/views/pages/detail_event_page.dart';
 import 'package:proto_kairos/views/pages/onboarding_page.dart';
 import 'package:provider/provider.dart';
 
@@ -32,12 +33,19 @@ final appRouter = GoRouter(
       pageBuilder: (context, state) => buildFadeTransitionPage(const AddEventPage()),
     ),
     GoRoute(
-      path: '/home/edit',
+      path: '/home/detail/edit',
       pageBuilder: (context, state) {
         final params = state.extra as Map<String, dynamic>?;
         return buildFadeTransitionPage(EditEventPage(eventId: params?["eventId"] ?? ""));
       },
-    )
+    ),
+    GoRoute(
+      path: '/home/detail',
+      pageBuilder: (context, state) {
+        final params = state.extra as Map<String, dynamic>?;
+        return buildFadeTransitionPage(DetailEventPage(eventId: params?["eventId"] ?? ""));
+      },
+    ),
   ],
 );
 
