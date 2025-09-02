@@ -302,8 +302,8 @@ class _AddEventControlState extends State<AddEventControl> {
 
       final newCountdown = CountdownEntity(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
-        title: titleController.text,
-        description: contentController.text,
+        title: titleController.text.trim(),
+        description: contentController.text.trim(),
         targetDate: selectedDateTime,
       );
 

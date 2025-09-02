@@ -10,4 +10,12 @@ class CountdownProvider with ChangeNotifier {
     _countdowns.add(countdown);
     notifyListeners();
   }
+
+  void updateCountdown(CountdownEntity updatedCountdown) {
+    final index = _countdowns.indexWhere((c) => c.id == updatedCountdown.id);
+    if (index != -1) {
+      _countdowns[index] = updatedCountdown;
+      notifyListeners();
+    }
+  }
 }
