@@ -12,26 +12,17 @@ class InitialPage extends StatelessWidget {
   const InitialPage({super.key});
 
   @override
-  Widget build(BuildContext _context) {
-    final bool isOnboardingCompleted = _context.watch<OnboardingProvider>().isOnboardingCompleted;
+  Widget build(BuildContext context) {
+    final bool isOnboardingCompleted = context.watch<OnboardingProvider>().isOnboardingCompleted;
     return isOnboardingCompleted ? const ScaffoldControl() : OnboardingPage();
   }
 }
 
 final appRouter = GoRouter(
   routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) => const InitialPage(),
-    ),
-    GoRoute(
-      path: '/home',
-      pageBuilder: (context, state) => buildFadeTransitionPage(const ScaffoldControl()),
-    ),
-    GoRoute(
-      path: '/home/add',
-      pageBuilder: (context, state) => buildFadeTransitionPage(const AddEventPage()),
-    ),
+    GoRoute(path: '/', builder: (context, state) => const InitialPage()),
+    GoRoute(path: '/home', pageBuilder: (context, state) => buildFadeTransitionPage(const ScaffoldControl())),
+    GoRoute(path: '/home/add', pageBuilder: (context, state) => buildFadeTransitionPage(const AddEventPage())),
     GoRoute(
       path: '/home/detail/edit',
       pageBuilder: (context, state) {
@@ -53,10 +44,7 @@ CustomTransitionPage buildFadeTransitionPage(Widget child) {
   return CustomTransitionPage(
     child: child,
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      return FadeTransition(
-        opacity: animation,
-        child: child,
-      );
+      return FadeTransition(opacity: animation, child: child);
     },
   );
 }

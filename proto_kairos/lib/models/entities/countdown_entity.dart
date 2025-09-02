@@ -19,19 +19,10 @@ class CountdownEntity extends HiveObject {
   @HiveField(4)
   final DateTime createdAt;
 
-  CountdownEntity({
-    required this.id,
-    required this.title,
-    this.description,
-    required this.targetDate,
-  }) : createdAt = DateTime.now();
+  CountdownEntity({required this.id, required this.title, this.description, required this.targetDate})
+    : createdAt = DateTime.now();
 
-  CountdownEntity copyWith({
-    String? id,
-    String? title,
-    String? description,
-    DateTime? targetDate,
-  }) {
+  CountdownEntity copyWith({String? id, String? title, String? description, DateTime? targetDate}) {
     return CountdownEntity(
       id: id ?? this.id,
       title: title ?? this.title,

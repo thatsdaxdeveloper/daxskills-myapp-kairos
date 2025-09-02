@@ -15,5 +15,4 @@ class Assets {
   static const String target = 'assets/illustrations/target.svg';
   static const String timeManagement = 'assets/illustrations/time-management.svg';
   static const String timeSvgrepoCom = 'assets/icons/time-svgrepo-com.svg';
-
 }

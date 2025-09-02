@@ -9,14 +9,13 @@ import 'package:provider/provider.dart';
 
 class EditEventPage extends StatelessWidget {
   final String eventId;
+
   const EditEventPage({super.key, required this.eventId});
 
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final event = context.watch<CountdownProvider>().countdowns.firstWhere(
-          (element) => element.id == eventId,
-    );
+    final event = context.watch<CountdownProvider>().countdowns.firstWhere((element) => element.id == eventId);
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -41,7 +40,7 @@ class EditEventPage extends StatelessWidget {
         ),
         body: Padding(
           padding: EdgeInsetsGeometry.symmetric(vertical: 20.h, horizontal: 10.w),
-          child: SingleChildScrollView(child: EditEventControl(countdown: event,)),
+          child: SingleChildScrollView(child: EditEventControl(countdown: event)),
         ),
       ),
     );

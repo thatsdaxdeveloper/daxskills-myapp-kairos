@@ -13,9 +13,7 @@ class CountdownEntityAdapter extends TypeAdapter<CountdownEntity> {
   @override
   CountdownEntity read(BinaryReader reader) {
     final numOfFields = reader.readByte();
-    final fields = <int, dynamic>{
-      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
-    };
+    final fields = <int, dynamic>{for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read()};
     return CountdownEntity(
       id: fields[0] as String,
       title: fields[1] as String,
@@ -46,7 +44,5 @@ class CountdownEntityAdapter extends TypeAdapter<CountdownEntity> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CountdownEntityAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is CountdownEntityAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

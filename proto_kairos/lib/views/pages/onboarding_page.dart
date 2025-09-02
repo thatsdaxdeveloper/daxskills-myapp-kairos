@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:proto_kairos/controllers/preferences/auth_pref.dart';
 import 'package:proto_kairos/controllers/providers/onboarding_provider.dart';
 import 'package:proto_kairos/models/data/generated/assets.dart';
 import 'package:proto_kairos/views/themes/theme_app.dart';
 import 'package:proto_kairos/views/utils/svg_util.dart';
 import 'package:proto_kairos/views/widgets/my_expanded_button.dart';
-import 'package:proto_kairos/views/widgets/my_primary_button.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -147,13 +145,21 @@ class OnboardingPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   // Bouton de navigation
-                  MyExpandedButton(onTap: () async {
-                    _context.go('/home');
-                    _context.read<OnboardingProvider>().putOnboardingCompleted(true);
-                  }, text: "Continuer"),
-                  SizedBox(height:4.h),
+                  MyExpandedButton(
+                    onTap: () async {
+                      _context.go('/home');
+                      _context.read<OnboardingProvider>().putOnboardingCompleted(true);
+                    },
+                    text: "Continuer",
+                  ),
+                  SizedBox(height: 4.h),
                   // Bientot disponible
-                  Text("La synchronisation des données sera bientôt disponible.", style: Theme.of(_context).textTheme.labelSmall!.copyWith(color: ThemeApp.trueWhite.withValues(alpha: 0.8)),),
+                  Text(
+                    "La synchronisation des données sera bientôt disponible.",
+                    style: Theme.of(
+                      _context,
+                    ).textTheme.labelSmall!.copyWith(color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
+                  ),
                 ],
               ),
             ),

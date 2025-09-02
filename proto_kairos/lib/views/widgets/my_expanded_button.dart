@@ -7,12 +7,7 @@ class MyExpandedButton extends StatelessWidget {
   final VoidCallback? onTap;
   final double opacity;
 
-  const MyExpandedButton({
-    super.key,
-    required this.text,
-    this.onTap,
-    this.opacity = 1.0,
-  });
+  const MyExpandedButton({super.key, required this.text, this.onTap, this.opacity = 1.0});
 
   @override
   Widget build(BuildContext _context) {
@@ -28,9 +23,7 @@ class MyExpandedButton extends StatelessWidget {
           width: 1.sw / 1.3,
           height: 40.h,
           decoration: BoxDecoration(
-            color: Theme.of(_context).primaryColor.withValues(alpha:
-              opacity,
-            ),
+            color: Theme.of(_context).primaryColor.withValues(alpha: opacity),
             borderRadius: BorderRadius.circular(20.r),
           ),
           child: Center(

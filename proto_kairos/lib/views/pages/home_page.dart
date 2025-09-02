@@ -82,8 +82,7 @@ class HomePage extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 10.h),
-                // Liste des événements du mois
+                SizedBox(height: 10.h), // Liste des événements du mois
                 ...filteredAndSortedEvents.map(
                   (event) => _buildCountdownTile(
                     eventId: event.id,

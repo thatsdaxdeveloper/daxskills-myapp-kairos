@@ -39,11 +39,7 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, _) {
-        return MaterialApp.router(
-          debugShowCheckedModeBanner: false,
-          theme: ThemeApp.theme(),
-          routerConfig: appRouter,
-        );
+        return MaterialApp.router(debugShowCheckedModeBanner: false, theme: ThemeApp.theme(), routerConfig: appRouter);
       },
     );
   }

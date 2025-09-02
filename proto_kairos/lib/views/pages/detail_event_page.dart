@@ -103,7 +103,7 @@ class DetailEventPage extends StatelessWidget {
         Column(
           children: [
             Text(":", style: textTheme.displayLarge),
-            SizedBox(height: 20.h,)
+            SizedBox(height: 20.h),
           ],
         ),
         Column(
@@ -115,7 +115,7 @@ class DetailEventPage extends StatelessWidget {
         Column(
           children: [
             Text(" UTC", style: textTheme.displayLarge),
-            SizedBox(height: 10.h,)
+            SizedBox(height: 10.h),
           ],
         ),
       ],

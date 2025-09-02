@@ -14,10 +14,7 @@ class ThemeApp {
       scaffoldBackgroundColor: eerieBlack,
       primaryColor: tropicalIndigo,
       textTheme: _textTheme(),
-      appBarTheme: AppBarTheme(
-        backgroundColor: eerieBlack,
-        foregroundColor: trueWhite,
-      ),
+      appBarTheme: AppBarTheme(backgroundColor: eerieBlack, foregroundColor: trueWhite),
     );
   }
 
@@ -45,7 +42,11 @@ class ThemeApp {
 
       // Labels - Boutons, badges, infos secondaires
       labelLarge: GoogleFonts.lato(fontSize: 14.sp, fontWeight: FontWeight.w500, color: trueWhite),
-      labelMedium: GoogleFonts.lato(fontSize: 12.sp, fontWeight: FontWeight.w400, color: trueWhite.withValues(alpha: 0.8)),
+      labelMedium: GoogleFonts.lato(
+        fontSize: 12.sp,
+        fontWeight: FontWeight.w400,
+        color: trueWhite.withValues(alpha: 0.8),
+      ),
       labelSmall: GoogleFonts.lato(fontSize: 10.sp, fontWeight: FontWeight.w400, color: Colors.grey[600]),
     );
   }
