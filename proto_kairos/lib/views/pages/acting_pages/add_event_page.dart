@@ -9,10 +9,10 @@ class AddEventPage extends StatelessWidget {
   const AddEventPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
+  Widget build(BuildContext _context) {
+    final TextTheme textTheme = Theme.of(_context).textTheme;
     return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
+      onTap: () => FocusScope.of(_context).unfocus(),
 
       child: Scaffold(
         appBar: AppBar(

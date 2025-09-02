@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext _context) {
     return ScreenUtilInit(
       designSize: const Size(360, 690),
       minTextAdapt: true,

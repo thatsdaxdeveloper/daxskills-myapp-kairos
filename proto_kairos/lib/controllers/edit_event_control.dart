@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:proto_kairos/models/entities/countdown_entity.dart';
 
 class EditEventControl extends StatefulWidget {
-  const EditEventControl({super.key});
+  final CountdownEntity countdown;
+  const EditEventControl({super.key, required this.countdown});
 
   @override
   State<EditEventControl> createState() => _EditEventControlState();
@@ -10,6 +12,8 @@ class EditEventControl extends StatefulWidget {
 class _EditEventControlState extends State<EditEventControl> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Center(
+      child: Text("ID : ${widget.countdown.title}"),
+    );
   }
 }

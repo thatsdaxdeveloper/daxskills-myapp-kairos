@@ -86,6 +86,7 @@ class HomePage extends StatelessWidget {
                 // Liste des événements du mois
                 ...filteredAndSortedEvents.map(
                   (event) => _buildCountdownTile(
+                    eventId: event.id,
                     title: event.title,
                     day: event.targetDate.day.toString().padLeft(2, "0"),
                     hour: event.targetDate.hour.toString().padLeft(2, "0"),
@@ -119,6 +120,7 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildCountdownTile({
+    required String eventId,
     required String title,
     required String day,
     required String hour,
@@ -129,7 +131,7 @@ class HomePage extends StatelessWidget {
         final textTheme = Theme.of(context).textTheme;
 
         return GestureDetector(
-          onTap: () => context.push('/home/edit'),
+          onTap: () => context.push('/home/edit', extra: {"eventId": eventId}),
           child: Container(
             width: 1.sw,
             margin: EdgeInsets.only(bottom: 20.h),

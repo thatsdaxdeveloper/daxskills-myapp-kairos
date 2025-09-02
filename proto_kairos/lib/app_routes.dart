@@ -11,8 +11,8 @@ class InitialPage extends StatelessWidget {
   const InitialPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final bool isOnboardingCompleted = context.watch<OnboardingProvider>().isOnboardingCompleted;
+  Widget build(BuildContext _context) {
+    final bool isOnboardingCompleted = _context.watch<OnboardingProvider>().isOnboardingCompleted;
     return isOnboardingCompleted ? const ScaffoldControl() : OnboardingPage();
   }
 }
@@ -33,7 +33,10 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: '/home/edit',
-      pageBuilder: (context, state) => buildFadeTransitionPage(const EditEventPage()),
+      pageBuilder: (context, state) {
+        final params = state.extra as Map<String, dynamic>?;
+        return buildFadeTransitionPage(EditEventPage(eventId: params?["eventId"] ?? ""));
+      },
     )
   ],
 );
