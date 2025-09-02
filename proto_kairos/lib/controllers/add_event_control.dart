@@ -190,10 +190,8 @@ class _AddEventControlState extends State<AddEventControl> {
           selectedTextStyle: textTheme.titleLarge!,
           defaultDecoration: BoxDecoration(color: ThemeApp.trueWhite.withValues(alpha: 0.03)),
           weekendDecoration: BoxDecoration(color: ThemeApp.trueWhite.withValues(alpha: 0.03)),
-          disabledTextStyle: textTheme.bodyMedium!.copyWith(color: ThemeApp.trueWhite.withValues(alpha: 0.2)),
-          disabledDecoration: BoxDecoration(
-            color: ThemeApp.trueWhite.withValues(alpha: 1),
-          )
+          disabledTextStyle: textTheme.bodyMedium!.copyWith(color: ThemeApp.eerieBlack),
+          disabledDecoration: BoxDecoration(color: ThemeApp.eerieBlack),
         ),
 
         daysOfWeekStyle: DaysOfWeekStyle(

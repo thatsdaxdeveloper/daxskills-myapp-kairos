@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 class DetailEventPage extends StatelessWidget {
   final String eventId;
+
   const DetailEventPage({super.key, required this.eventId});
 
   @override
@@ -18,45 +19,43 @@ class DetailEventPage extends StatelessWidget {
       builder: (context, countdownProvider, _) {
         final event = countdownProvider.countdowns.firstWhere((element) => element.id == eventId);
         return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          scrolledUnderElevation: 0,
-          backgroundColor: Colors.transparent,
-          leading: Builder(
-            builder: (context) => GestureDetector(
-              onTap: () => context.pop(),
-              child: Center(child: svgIcon(path: Assets.arrowToLeftSvgrepoCom)),
+          appBar: AppBar(
+            elevation: 0,
+            scrolledUnderElevation: 0,
+            backgroundColor: Colors.transparent,
+            leading: Builder(
+              builder: (context) => GestureDetector(
+                onTap: () => context.pop(),
+                child: Center(child: svgIcon(path: Assets.arrowToLeftSvgrepoCom)),
+              ),
             ),
-          ),
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Détails de l'événement", style: textTheme.headlineMedium),
-              Text("Visualisez et gérez votre compte à rebours", style: textTheme.labelMedium),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Détails de l'événement", style: textTheme.headlineMedium),
+                Text("Visualisez et gérez votre compte à rebours", style: textTheme.labelMedium),
+              ],
+            ),
+            actions: [
+              GestureDetector(
+                onTap: () => context.push('/home/detail/edit', extra: {"eventId": eventId}),
+                child: Center(child: svgIcon(path: Assets.editSvgrepoCom)),
+              ),
+              SizedBox(width: 10.w),
             ],
           ),
-          actions: [
-            GestureDetector(
-              onTap: () => context.push('/home/detail/edit', extra: {"eventId": eventId}),
-              child: Center(child: svgIcon(path: Assets.editSvgrepoCom)),
-            ),
-            SizedBox(width: 20.w),
-          ],
-        ),
           body: SingleChildScrollView(
             child: Padding(
               padding: EdgeInsetsGeometry.symmetric(vertical: 20.h, horizontal: 10.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(event.title, style: textTheme.headlineLarge,),
+                  Text(event.title, style: textTheme.headlineLarge),
                   SizedBox(height: 20.h),
 
                   _buildSectionTitle(context, "Informations complémentaires"),
                   Text(
-                    event.description?.isNotEmpty == true
-                        ? event.description!
-                        : "Aucune description disponible",
+                    event.description?.isNotEmpty == true ? event.description! : "Aucune description disponible",
                     style: textTheme.bodySmall?.copyWith(
                       color: event.description?.isNotEmpty == true
                           ? ThemeApp.trueWhite
@@ -66,21 +65,19 @@ class DetailEventPage extends StatelessWidget {
                   ),
 
                   _buildSectionTitle(context, "Jour prévu"),
-                  Text(event.targetDate.toString(), style: textTheme.headlineSmall,),
+                  Text(event.targetDate.toString(), style: textTheme.headlineSmall),
 
                   _buildSectionTitle(context, "Horaire précis"),
-                  Row(
-                    children: [
-                      Text(event.targetDate.hour.toString().padLeft(2, "0"), style: textTheme.headlineSmall,),
-                      Text(" : ", style: textTheme.headlineSmall,),
-                      Text(event.targetDate.hour.toString().padLeft(2, "0"), style: textTheme.headlineSmall,),
-                    ],
+                  _buildTime(
+                    context,
+                    event.targetDate.hour.toString().padLeft(2, "0"),
+                    event.targetDate.minute.toString().padLeft(2, "0"),
                   ),
                 ],
               ),
             ),
           ),
-      );
+        );
       },
     );
   }
@@ -90,6 +87,38 @@ class DetailEventPage extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10.h),
       child: Text(title, style: textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold)),
+    );
+  }
+
+  Widget _buildTime(BuildContext context, String hour, String minute) {
+    final textTheme = Theme.of(context).textTheme;
+    return Row(
+      children: [
+        Column(
+          children: [
+            Text(hour, style: textTheme.displayLarge),
+            Text("Heures", style: textTheme.labelMedium!.copyWith(color: ThemeApp.trueWhite)),
+          ],
+        ),
+        Column(
+          children: [
+            Text(":", style: textTheme.displayLarge),
+            SizedBox(height: 20.h,)
+          ],
+        ),
+        Column(
+          children: [
+            Text(minute, style: textTheme.displayLarge),
+            Text("Minutes", style: textTheme.labelMedium!.copyWith(color: ThemeApp.trueWhite)),
+          ],
+        ),
+        Column(
+          children: [
+            Text(" UTC", style: textTheme.displayLarge),
+            SizedBox(height: 10.h,)
+          ],
+        ),
+      ],
     );
   }
 }

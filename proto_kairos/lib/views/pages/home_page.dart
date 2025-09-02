@@ -167,7 +167,7 @@ class HomePage extends StatelessWidget {
                             height: 32.h,
                             child: Text(
                               title,
-                              style: textTheme.titleSmall,
+                              style: textTheme.labelMedium!.copyWith(color: ThemeApp.trueWhite),
                               overflow: TextOverflow.visible,
                               softWrap: true,
                               maxLines: 2,
