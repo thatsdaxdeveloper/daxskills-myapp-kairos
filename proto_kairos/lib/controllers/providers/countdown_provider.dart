@@ -18,4 +18,9 @@ class CountdownProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void removeCountdown(String eventId) {
+    _countdowns.removeWhere((c) => c.id == eventId);
+    notifyListeners();
+  }
 }

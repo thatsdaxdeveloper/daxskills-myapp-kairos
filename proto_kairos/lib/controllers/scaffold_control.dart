@@ -24,7 +24,7 @@ class _ScaffoldControlState extends State<ScaffoldControl> {
           child: GestureDetector(
             onTap: () => context.push('/home/add'),
             child: Text(
-              "Ajouter un événement",
+              "Ajouter",
               style: Theme.of(
                 context,
               ).textTheme.titleSmall!.copyWith(color: ThemeApp.tropicalIndigo, fontWeight: FontWeight.bold),
@@ -33,26 +33,6 @@ class _ScaffoldControlState extends State<ScaffoldControl> {
         ),
       ),
       body: HomePage(),
-      // floatingActionButton: _buildFloatingActionButton(),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-    );
-  }
-
-  Widget _buildFloatingActionButton() {
-    return InkWell(
-      onTap: () => context.push('/home/add'),
-      borderRadius: BorderRadius.circular(20.r),
-      splashColor: ThemeApp.eerieBlack.withValues(alpha: 0.3),
-      highlightColor: ThemeApp.eerieBlack.withValues(alpha: 0.1),
-      child: Ink(
-        height: 50.h,
-        width: 50.h,
-        decoration: BoxDecoration(
-          color: ThemeApp.trueWhite.withValues(alpha: 0.06),
-          borderRadius: BorderRadius.circular(20.r),
-        ),
-        child: Center(child: svgIcon(path: Assets.plusSvgrepoCom, size: 32)),
-      ),
     );
   }
 }

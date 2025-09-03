@@ -86,12 +86,16 @@ class HomePage extends StatelessWidget {
                   ),
                   SizedBox(height: 10.h), // Liste des événements du mois
                   ...filteredAndSortedEvents.map(
-                    (event) => _buildCountdownTile(
-                      eventId: event.id,
-                      title: event.title,
-                      day: event.targetDate.day.toString().padLeft(2, "0"),
-                      hour: event.targetDate.hour.toString().padLeft(2, "0"),
-                      minute: event.targetDate.minute.toString().padLeft(2, "0"),
+                    (event) => Padding(
+                      padding: EdgeInsets.only(bottom: 20.h),
+                      child: _buildCountdownTile(
+                        key: ValueKey(event.id),
+                        eventId: event.id,
+                        title: event.title,
+                        day: event.targetDate.day.toString().padLeft(2, "0"),
+                        hour: event.targetDate.hour.toString().padLeft(2, "0"),
+                        minute: event.targetDate.minute.toString().padLeft(2, "0"),
+                      ),
                     ),
                   ),
                 ],
@@ -127,7 +131,7 @@ class HomePage extends StatelessWidget {
     required String day,
     required String hour,
     required String minute,
-    int key = 0,
+    required ValueKey key,
   }) {
     return Consumer<CountdownProvider>(
       builder: (context, countdownProvider, _) {
@@ -136,36 +140,41 @@ class HomePage extends StatelessWidget {
         return GestureDetector(
           onTap: () => context.push('/home/detail', extra: {"eventId": eventId}),
           child: Slidable(
+            key: ValueKey(key),
             endActionPane: ActionPane(
-              key: ValueKey(key),
+              key: ValueKey("dismissible_$key"),
               motion: ScrollMotion(),
               extentRatio: 0.28,
-              dismissible: DismissiblePane(onDismissed: () {}),
+              dismissible: DismissiblePane(onDismissed: () {
+                countdownProvider.removeCountdown(eventId);
+              }),
               children: [
                 Expanded(
-                  child: GestureDetector(
-                    child: Container(
-                      color: ThemeApp.tropicalIndigo.withValues(alpha: 0.1),
-                      padding: EdgeInsets.all(18.w),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          svgIcon(path: Assets.trashSvgrepoCom, color: ThemeApp.trueWhite, size: 16.h),
-                          SizedBox(height: 4.h),
-                          Text(
-                            "Supprimer",
-                            style: textTheme.bodySmall!.copyWith(color: ThemeApp.trueWhite, fontWeight: FontWeight.bold),
-                          ),
-                        ],
+                  child: SizedBox.expand(
+                    child: GestureDetector(
+                      onTap: () => countdownProvider.removeCountdown(eventId),
+                      child: Container(
+                        color: ThemeApp.tropicalIndigo.withValues(alpha: 0.1),
+                        padding: EdgeInsets.all(18.w),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            svgIcon(path: Assets.trashSvgrepoCom, color: ThemeApp.trueWhite, size: 16.h),
+                            SizedBox(height: 4.h),
+                            Text(
+                              "Supprimer",
+                              style: textTheme.bodySmall!.copyWith(color: ThemeApp.trueWhite, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
               ],
             ),
-            child: Container(
+            child: SizedBox(
               width: 1.sw,
-              margin: EdgeInsets.only(bottom: 20.h),
               child: Row(
                 children: [
                   // Jour
