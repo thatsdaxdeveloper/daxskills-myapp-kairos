@@ -16,38 +16,38 @@ class OnboardingPage extends StatelessWidget {
   final PageController _pageController = PageController();
 
   @override
-  Widget build(BuildContext _context) {
+  Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     final List<Widget> pages = [
       _onboardingContent(
-        context: _context,
+        context: context,
         isFirstPage: true,
         title: "Centralisez vos attentes",
         description: [
           TextSpan(
             style: Theme.of(
-              _context,
+              context,
             ).textTheme.bodyLarge!.copyWith(fontSize: 16.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
             text: "Ne perdez plus de vue ",
             children: [
               TextSpan(
-                style: Theme.of(_context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold),
                 text: "les dates clés.",
               ),
               TextSpan(
                 style: Theme.of(
-                  _context,
+                  context,
                 ).textTheme.bodyLarge!.copyWith(fontSize: 16.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
                 text: " Gardez tous ",
               ),
               TextSpan(
-                style: Theme.of(_context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold),
                 text: "vos événements importants ",
               ),
               TextSpan(
                 style: Theme.of(
-                  _context,
+                  context,
                 ).textTheme.bodyLarge!.copyWith(fontSize: 16.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
                 text: "à portée de main.",
               ),
@@ -57,36 +57,36 @@ class OnboardingPage extends StatelessWidget {
         imagePath: Assets.eventsCalendar,
       ),
       _onboardingContent(
-        context: _context,
+        context: context,
         title: "Suivi en  temps réel",
         description: [
           TextSpan(
-            style: Theme.of(_context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold),
             text: "Visualisez le temps restant ",
             children: [
               TextSpan(
                 style: Theme.of(
-                  _context,
+                  context,
                 ).textTheme.bodyLarge!.copyWith(fontSize: 16.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
                 text: "précisément, ",
               ),
               TextSpan(
-                style: Theme.of(_context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold),
                 text: "jusqu'à la seconde",
               ),
               TextSpan(
                 style: Theme.of(
-                  _context,
+                  context,
                 ).textTheme.bodyLarge!.copyWith(fontSize: 16.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
                 text: ", pour ",
               ),
               TextSpan(
-                style: Theme.of(_context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold),
                 text: "chaque objectif",
               ),
               TextSpan(
                 style: Theme.of(
-                  _context,
+                  context,
                 ).textTheme.bodyLarge!.copyWith(fontSize: 16.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
                 text: ".",
               ),
@@ -96,26 +96,26 @@ class OnboardingPage extends StatelessWidget {
         imagePath: Assets.timeManagement,
       ),
       _onboardingContent(
-        context: _context,
+        context: context,
         title: "Restez focalisé",
         description: [
           TextSpan(
-            style: Theme.of(_context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold),
             text: "Concentrez-vous sur l'essentiel ",
             children: [
               TextSpan(
                 style: Theme.of(
-                  _context,
+                  context,
                 ).textTheme.bodyLarge!.copyWith(fontSize: 16.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
                 text: "en laissant ",
               ),
               TextSpan(
-                style: Theme.of(_context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold),
                 text: "Kairos ",
               ),
               TextSpan(
                 style: Theme.of(
-                  _context,
+                  context,
                 ).textTheme.bodyLarge!.copyWith(fontSize: 16.sp, color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
                 text: "le compte à rebours.",
               ),
@@ -129,7 +129,7 @@ class OnboardingPage extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          Align(alignment: Alignment(0, -0.86), child: _buildPageIndicator(_context)),
+          Align(alignment: Alignment(0, -0.86), child: _buildPageIndicator(context)),
 
           PageView.builder(
             controller: _pageController,
@@ -147,8 +147,8 @@ class OnboardingPage extends StatelessWidget {
                   // Bouton de navigation
                   MyExpandedButton(
                     onTap: () async {
-                      _context.go('/home');
-                      _context.read<OnboardingProvider>().putOnboardingCompleted(true);
+                      context.go('/home');
+                      context.read<OnboardingProvider>().putOnboardingCompleted(true);
                     },
                     text: "Continuer",
                   ),
@@ -157,7 +157,7 @@ class OnboardingPage extends StatelessWidget {
                   Text(
                     "La synchronisation des données sera bientôt disponible.",
                     style: Theme.of(
-                      _context,
+                      context,
                     ).textTheme.labelSmall!.copyWith(color: ThemeApp.trueWhite.withValues(alpha: 0.8)),
                   ),
                 ],

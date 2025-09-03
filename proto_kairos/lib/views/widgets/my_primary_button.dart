@@ -9,7 +9,7 @@ class MyPrimaryButton extends StatelessWidget {
   const MyPrimaryButton({super.key, required this.text, required this.onTap});
 
   @override
-  Widget build(BuildContext _context) {
+  Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(20.r),
@@ -18,9 +18,9 @@ class MyPrimaryButton extends StatelessWidget {
       child: Ink(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         height: 40.h,
-        decoration: BoxDecoration(color: Theme.of(_context).primaryColor, borderRadius: BorderRadius.circular(20.r)),
+        decoration: BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(20.r)),
         child: Center(
-          child: Text(text, style: Theme.of(_context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold)),
+          child: Text(text, style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold)),
         ),
       ),
     );

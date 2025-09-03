@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:proto_kairos/controllers/providers/countdown_provider.dart';
 import 'package:proto_kairos/models/data/generated/assets.dart';
 import 'package:proto_kairos/views/themes/theme_app.dart';
+import 'package:proto_kairos/views/utils/formatted_date_util.dart';
 import 'package:proto_kairos/views/utils/svg_util.dart';
 import 'package:provider/provider.dart';
 
@@ -50,7 +52,9 @@ class DetailEventPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(event.title, style: textTheme.headlineLarge),
+                  Center(child: Text(event.title, style: textTheme.headlineLarge)),
+                  SizedBox(height: 20.h),
+                  _buildCountdown(context),
                   SizedBox(height: 20.h),
 
                   _buildSectionTitle(context, "Informations complémentaires"),
@@ -64,8 +68,11 @@ class DetailEventPage extends StatelessWidget {
                     textAlign: TextAlign.start,
                   ),
 
+                  SizedBox(height: 30.h),
+
+                  _buildDivider(context),
                   _buildSectionTitle(context, "Jour prévu"),
-                  Text(event.targetDate.toString(), style: textTheme.headlineSmall),
+                  _buildDate(context, event.targetDate),
 
                   _buildSectionTitle(context, "Horaire précis"),
                   _buildTime(
@@ -73,6 +80,9 @@ class DetailEventPage extends StatelessWidget {
                     event.targetDate.hour.toString().padLeft(2, "0"),
                     event.targetDate.minute.toString().padLeft(2, "0"),
                   ),
+
+                  SizedBox(height: 38.h),
+                  _buildLastUpdate(context, event.updatedAt),
                 ],
               ),
             ),
@@ -88,6 +98,47 @@ class DetailEventPage extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 10.h),
       child: Text(title, style: textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold)),
     );
+  }
+
+  Widget _buildDate(BuildContext context, DateTime date) {
+    final textTheme = Theme.of(context).textTheme;
+    final dateFormat = DateFormat('yMMMMEEEEd', 'fr_FR');
+    final formattedDate = dateFormat.format(date);
+
+    return Text(formattedDate.toUpperCase(), style: textTheme.displayLarge);
+  }
+
+  Widget _buildLastUpdate(BuildContext context, DateTime? date) {
+    final textTheme = Theme.of(context).textTheme;
+    final hour = date?.hour.toString().padLeft(2, "0");
+    final minute = date?.minute.toString().padLeft(2, "0");
+    return date == null
+        ? Container()
+        : Center(
+            child: RichText(
+              text: TextSpan(
+                text: "Dernière mise à jour le ",
+                style: textTheme.labelSmall!.copyWith(color: ThemeApp.trueWhite.withValues(alpha: 0.6)),
+                children: [
+                  TextSpan(
+                    text: formattedDateUtil(date),
+                    style: textTheme.labelSmall!.copyWith(
+                      color: ThemeApp.trueWhite.withValues(alpha: 0.9),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextSpan(text: " à "),
+                  TextSpan(
+                    text: "$hour:$minute",
+                    style: textTheme.labelSmall!.copyWith(
+                      color: ThemeApp.trueWhite.withValues(alpha: 0.9),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
   }
 
   Widget _buildTime(BuildContext context, String hour, String minute) {
@@ -119,6 +170,56 @@ class DetailEventPage extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+
+  Widget _buildDivider(BuildContext context) {
+    return Divider(height: 20.h, thickness: 8, color: ThemeApp.tropicalIndigo.withValues(alpha: 0.4));
+  }
+
+  Widget _buildCountdown(BuildContext context) {
+    return Container(
+      height: 60.h,
+      width: 1.sw,
+      padding: EdgeInsets.all(10.w),
+      color: ThemeApp.trueWhite.withValues(alpha: 0.8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _buildCountdownContent(context, 00, "JOUR"),
+          _buildCountdownContent(context, 00, "HRS"),
+          _buildCountdownContent(context, 00, "MIN"),
+          _buildCountdownContent(context, 00, "SEC"),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCountdownContent(BuildContext context, int value, String title) {
+    return Container(
+      height: 1.sh,
+      width: 1.sw / 5,
+      color: ThemeApp.eerieBlack,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Spacer(),
+          Text("$value", style: Theme.of(context).textTheme.headlineLarge),
+          Spacer(),
+
+          Container(
+            height: 70.h,
+            width: 20.w,
+            color: ThemeApp.tropicalIndigo.withValues(alpha: 0.8),
+            child: Center(
+              child: RotatedBox(
+                quarterTurns: 3,
+                child: Text(title, style: Theme.of(context).textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold,)),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

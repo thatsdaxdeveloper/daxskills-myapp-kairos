@@ -312,6 +312,7 @@ class _EditEventControlState extends State<EditEventControl> {
           ? contentController.text.trim()
           : widget.countdown.description,
       targetDate: updatedDate,
+      updatedAt: DateTime.now(),
     );
 
     context.read<CountdownProvider>().updateCountdown(updatedCountdown);

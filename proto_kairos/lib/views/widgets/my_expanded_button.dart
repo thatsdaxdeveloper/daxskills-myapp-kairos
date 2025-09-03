@@ -10,7 +10,7 @@ class MyExpandedButton extends StatelessWidget {
   const MyExpandedButton({super.key, required this.text, this.onTap, this.opacity = 1.0});
 
   @override
-  Widget build(BuildContext _context) {
+  Widget build(BuildContext context) {
     return Opacity(
       opacity: opacity,
       child: InkWell(
@@ -23,13 +23,13 @@ class MyExpandedButton extends StatelessWidget {
           width: 1.sw / 1.3,
           height: 40.h,
           decoration: BoxDecoration(
-            color: Theme.of(_context).primaryColor.withValues(alpha: opacity),
+            color: Theme.of(context).primaryColor.withValues(alpha: opacity),
             borderRadius: BorderRadius.circular(20.r),
           ),
           child: Center(
             child: Text(
               text,
-              style: Theme.of(_context).textTheme.titleLarge!.copyWith(
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 fontWeight: FontWeight.bold,
                 color: onTap != null ? Colors.white : Colors.white.withValues(alpha: opacity + 0.2),
               ),
