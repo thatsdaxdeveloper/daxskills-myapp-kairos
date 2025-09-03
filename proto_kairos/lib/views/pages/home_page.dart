@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:flutter_slidable/flutter_slidable.dart";
 import "package:go_router/go_router.dart";
 import "package:proto_kairos/controllers/providers/countdown_provider.dart";
 import "package:proto_kairos/models/data/generated/assets.dart";
@@ -47,54 +48,56 @@ class HomePage extends StatelessWidget {
         // Trier les clés (mois/année) par ordre chronologique
         final sortedKeys = eventsByMonth.keys.toList()..sort((a, b) => a.compareTo(b));
 
-        return ListView.builder(
-          itemCount: sortedKeys.length,
-          itemBuilder: (context, monthIndex) {
-            final key = sortedKeys[monthIndex];
-            final events = eventsByMonth[key]!;
-            final firstEvent = events.first;
-            final date = firstEvent.targetDate;
-            final monthName = _getMonthName(date.month);
+        return SlidableAutoCloseBehavior(
+          child: ListView.builder(
+            itemCount: sortedKeys.length,
+            itemBuilder: (context, monthIndex) {
+              final key = sortedKeys[monthIndex];
+              final events = eventsByMonth[key]!;
+              final firstEvent = events.first;
+              final date = firstEvent.targetDate;
+              final monthName = _getMonthName(date.month);
 
-            final filteredAndSortedEvents = events.where((event) => event.targetDate.month == date.month).toList()
-              ..sort((a, b) => a.targetDate.compareTo(b.targetDate));
+              final filteredAndSortedEvents = events.where((event) => event.targetDate.month == date.month).toList()
+                ..sort((a, b) => a.targetDate.compareTo(b.targetDate));
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // En-tête du mois/année
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      monthName,
-                      style: Theme.of(context).textTheme.displayMedium!.copyWith(
-                        fontSize: 48.sp,
-                        color: ThemeApp.trueWhite.withValues(alpha: 0.1),
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // En-tête du mois/année
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        monthName,
+                        style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                          fontSize: 48.sp,
+                          color: ThemeApp.trueWhite.withValues(alpha: 0.1),
+                        ),
                       ),
-                    ),
-                    Text(
-                      date.year.toString(),
-                      style: Theme.of(
-                        context,
-                      ).textTheme.labelLarge!.copyWith(color: ThemeApp.trueWhite.withValues(alpha: 0.1)),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10.h), // Liste des événements du mois
-                ...filteredAndSortedEvents.map(
-                  (event) => _buildCountdownTile(
-                    eventId: event.id,
-                    title: event.title,
-                    day: event.targetDate.day.toString().padLeft(2, "0"),
-                    hour: event.targetDate.hour.toString().padLeft(2, "0"),
-                    minute: event.targetDate.minute.toString().padLeft(2, "0"),
+                      Text(
+                        date.year.toString(),
+                        style: Theme.of(
+                          context,
+                        ).textTheme.labelLarge!.copyWith(color: ThemeApp.trueWhite.withValues(alpha: 0.1)),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            );
-          },
+                  SizedBox(height: 10.h), // Liste des événements du mois
+                  ...filteredAndSortedEvents.map(
+                    (event) => _buildCountdownTile(
+                      eventId: event.id,
+                      title: event.title,
+                      day: event.targetDate.day.toString().padLeft(2, "0"),
+                      hour: event.targetDate.hour.toString().padLeft(2, "0"),
+                      minute: event.targetDate.minute.toString().padLeft(2, "0"),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
         );
       },
     );
@@ -124,6 +127,7 @@ class HomePage extends StatelessWidget {
     required String day,
     required String hour,
     required String minute,
+    int key = 0,
   }) {
     return Consumer<CountdownProvider>(
       builder: (context, countdownProvider, _) {
@@ -131,61 +135,90 @@ class HomePage extends StatelessWidget {
 
         return GestureDetector(
           onTap: () => context.push('/home/detail', extra: {"eventId": eventId}),
-          child: Container(
-            width: 1.sw,
-            margin: EdgeInsets.only(bottom: 20.h),
-            child: Row(
+          child: Slidable(
+            endActionPane: ActionPane(
+              key: ValueKey(key),
+              motion: ScrollMotion(),
+              extentRatio: 0.28,
+              dismissible: DismissiblePane(onDismissed: () {}),
               children: [
-                // Jour
-                RotatedBox(
-                  quarterTurns: 3,
-                  child: Text(
-                    day,
-                    style: textTheme.displayLarge!.copyWith(fontSize: 100, height: 0.8, letterSpacing: -2),
-                  ),
-                ),
-
-                IntrinsicHeight(
-                  child: Row(
-                    children: [
-                      // Diviser
-                      VerticalDivider(
-                        width: 30.w,
-                        color: ThemeApp.trueWhite,
-                        thickness: 1.8.w,
-                        indent: 0,
-                        endIndent: 0,
-                      ),
-
-                      // Informations
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                Expanded(
+                  child: GestureDetector(
+                    child: Container(
+                      color: ThemeApp.tropicalIndigo.withValues(alpha: 0.1),
+                      padding: EdgeInsets.all(18.w),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(
-                            width: 180.w,
-                            height: 32.h,
-                            child: Text(
-                              title,
-                              style: textTheme.labelMedium!.copyWith(color: ThemeApp.trueWhite),
-                              overflow: TextOverflow.visible,
-                              softWrap: true,
-                              maxLines: 2,
-                            ),
-                          ),
-                          Text("$hour:$minute UTC", style: textTheme.titleLarge),
+                          svgIcon(path: Assets.trashSvgrepoCom, color: ThemeApp.trueWhite, size: 16.h),
                           SizedBox(height: 4.h),
-                          Container(width: 180.w, height: 4.h, color: ThemeApp.tropicalIndigo),
+                          Text(
+                            "Supprimer",
+                            style: textTheme.bodySmall!.copyWith(color: ThemeApp.trueWhite, fontWeight: FontWeight.bold),
+                          ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-
-                Spacer(),
-
-                // Bouton
-                svgIcon(path: Assets.chevronRightSvgrepoCom, color: ThemeApp.tropicalIndigo),
               ],
+            ),
+            child: Container(
+              width: 1.sw,
+              margin: EdgeInsets.only(bottom: 20.h),
+              child: Row(
+                children: [
+                  // Jour
+                  RotatedBox(
+                    quarterTurns: 3,
+                    child: Text(
+                      day,
+                      style: textTheme.displayLarge!.copyWith(fontSize: 100, height: 0.8, letterSpacing: -2),
+                    ),
+                  ),
+
+                  IntrinsicHeight(
+                    child: Row(
+                      children: [
+                        // Diviser
+                        VerticalDivider(
+                          width: 30.w,
+                          color: ThemeApp.trueWhite,
+                          thickness: 1.8.w,
+                          indent: 0,
+                          endIndent: 0,
+                        ),
+
+                        // Informations
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: 180.w,
+                              height: 32.h,
+                              child: Text(
+                                title,
+                                style: textTheme.labelMedium!.copyWith(color: ThemeApp.trueWhite),
+                                overflow: TextOverflow.visible,
+                                softWrap: true,
+                                maxLines: 2,
+                              ),
+                            ),
+                            Text("$hour:$minute UTC", style: textTheme.titleLarge),
+                            SizedBox(height: 4.h),
+                            Container(width: 180.w, height: 4.h, color: ThemeApp.tropicalIndigo),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  Spacer(),
+
+                  // Bouton
+                  svgIcon(path: Assets.chevronRightSvgrepoCom, color: ThemeApp.tropicalIndigo),
+                ],
+              ),
             ),
           ),
         );
