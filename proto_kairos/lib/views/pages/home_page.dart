@@ -3,10 +3,13 @@ import "package:flutter/services.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_slidable/flutter_slidable.dart";
 import "package:go_router/go_router.dart";
+import "package:intl/intl.dart";
 import "package:proto_kairos/controllers/providers/countdown_provider.dart";
 import "package:proto_kairos/models/data/generated/assets.dart";
+import "package:proto_kairos/views/components/show_my_toastification.dart";
 import "package:proto_kairos/views/themes/theme_app.dart";
 import "package:proto_kairos/views/utils/svg_util.dart";
+import "package:proto_kairos/views/widgets/my_toastification.dart";
 import "package:provider/provider.dart";
 
 class HomePage extends StatelessWidget {
@@ -136,6 +139,9 @@ class HomePage extends StatelessWidget {
     return Consumer<CountdownProvider>(
       builder: (context, countdownProvider, _) {
         final textTheme = Theme.of(context).textTheme;
+        final dayOfEvent = countdownProvider.countdowns.firstWhere((event) => event.id == eventId).targetDate;
+        final dateFormated = DateFormat('yMMMMd', 'fr_FR');
+        final dayOfEventFormated = dateFormated.format(dayOfEvent);
 
         return GestureDetector(
           onTap: () => context.push('/home/detail', extra: {"eventId": eventId}),
@@ -146,13 +152,19 @@ class HomePage extends StatelessWidget {
               motion: ScrollMotion(),
               extentRatio: 0.28,
               dismissible: DismissiblePane(onDismissed: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                showMyToastification(context: context, message: "Événement du $dayOfEventFormated a été supprimé");
                 countdownProvider.removeCountdown(eventId);
               }),
               children: [
                 Expanded(
                   child: SizedBox.expand(
                     child: GestureDetector(
-                      onTap: () => countdownProvider.removeCountdown(eventId),
+                      onTap: () {
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        showMyToastification(context: context, message: "Événement du $dayOfEventFormated a été supprimé");
+                        countdownProvider.removeCountdown(eventId);
+                      },
                       child: Container(
                         color: ThemeApp.tropicalIndigo.withValues(alpha: 0.1),
                         padding: EdgeInsets.all(18.w),

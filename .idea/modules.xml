@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/proto_kairos/proto_kairos.iml" filepath="$PROJECT_DIR$/proto_kairos/proto_kairos.iml" />
+      <module fileurl="file://$PROJECT_DIR$/proto_kairos/android/proto_kairos_android.iml" filepath="$PROJECT_DIR$/proto_kairos/android/proto_kairos_android.iml" />
     </modules>
   </component>
 </project>

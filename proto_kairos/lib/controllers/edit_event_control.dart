@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -6,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:proto_kairos/controllers/providers/countdown_provider.dart';
 import 'package:proto_kairos/models/data/generated/assets.dart';
 import 'package:proto_kairos/models/entities/countdown_entity.dart';
+import 'package:proto_kairos/views/components/show_my_toastification.dart';
 import 'package:proto_kairos/views/themes/theme_app.dart';
 import 'package:proto_kairos/views/utils/svg_util.dart';
 import 'package:proto_kairos/views/widgets/my_expanded_button.dart';
@@ -285,39 +287,55 @@ class _EditEventControlState extends State<EditEventControl> {
           ),
         ),
         SizedBox(height: 50.h),
-        MyExpandedButton(text: "Modifier", onTap: hasChanges ? _updateEvent : null, opacity: hasChanges ? 1.0 : 0.2),
+        MyExpandedButton(
+          text: "Modifier",
+          onTap: hasChanges
+              ? () {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  _updateEvent();
+                }
+              : null,
+          opacity: hasChanges ? 1.0 : 0.2,
+        ),
       ],
     );
   }
 
   void _updateEvent() {
-    FocusScope.of(context).unfocus();
+    try {
+      FocusScope.of(context).unfocus();
 
-    // Récupérer la date sélectionnée ou utiliser la date actuelle
-    final date = selectedDate ?? DateTime.now();
+      final date = selectedDate ?? DateTime.now();
 
-    // Créer un nouveau DateTime avec la date existante et l'heure sélectionnée
-    final updatedDate = DateTime(
-      date.year,
-      date.month,
-      date.day,
-      _hoursWheel.selected, // Heure
-      _minutesWheel.selected, // Minutes avec pas de 5
-    );
+      final updatedDate = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        _hoursWheel.selected,
+        _minutesWheel.selected,
+      );
 
-    // Créer un nouvel événement mis à jour
-    final updatedCountdown = widget.countdown.copyWith(
-      title: titleController.text.trim().isNotEmpty ? titleController.text.trim() : widget.countdown.title,
-      description: contentController.text.trim().isNotEmpty
-          ? contentController.text.trim()
-          : widget.countdown.description,
-      targetDate: updatedDate,
-      updatedAt: DateTime.now(),
-    );
+      final updatedCountdown = widget.countdown.copyWith(
+        title: titleController.text.trim().isNotEmpty ? titleController.text.trim() : widget.countdown.title,
+        description: contentController.text.trim().isNotEmpty
+            ? contentController.text.trim()
+            : widget.countdown.description,
+        targetDate: updatedDate,
+        updatedAt: DateTime.now(),
+      );
 
-    context.read<CountdownProvider>().updateCountdown(updatedCountdown);
+      context.read<CountdownProvider>().updateCountdown(updatedCountdown);
+      showMyToastification(context: context, message: "Événement modifié");
 
-    context.pop();
+      context.pop();
+    } catch (e) {
+      if (kDebugMode) {
+        print("Erreur dans _addEvent: $e");
+      }
+      if (mounted) {
+        showMyToastification(context: context, message: "Erreur: ${e.toString()}", isError: true);
+      }
+    }
   }
 
   Widget _centerBar(BuildContext context) {

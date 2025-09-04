@@ -41,7 +41,10 @@ class DetailEventPage extends StatelessWidget {
             ),
             actions: [
               GestureDetector(
-                onTap: () => context.push('/home/detail/edit', extra: {"eventId": eventId}),
+                onTap: () {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  context.push('/home/detail/edit', extra: {"eventId": eventId});
+                },
                 child: Center(child: svgIcon(path: Assets.editSvgrepoCom)),
               ),
               SizedBox(width: 10.w),

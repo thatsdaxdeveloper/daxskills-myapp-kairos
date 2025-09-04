@@ -26,7 +26,10 @@ class EditEventPage extends StatelessWidget {
           backgroundColor: Colors.transparent,
           leading: Builder(
             builder: (context) => GestureDetector(
-              onTap: () => context.pop(),
+              onTap: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                context.pop();
+              },
               child: Center(child: svgIcon(path: Assets.arrowToLeftSvgrepoCom)),
             ),
           ),

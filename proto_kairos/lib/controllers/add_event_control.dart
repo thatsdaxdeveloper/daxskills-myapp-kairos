@@ -6,6 +6,7 @@ import "package:intl/intl.dart";
 import "package:proto_kairos/controllers/providers/countdown_provider.dart";
 import "package:proto_kairos/models/data/generated/assets.dart";
 import "package:proto_kairos/models/entities/countdown_entity.dart";
+import "package:proto_kairos/views/components/show_my_toastification.dart";
 import "package:proto_kairos/views/themes/theme_app.dart";
 import "package:proto_kairos/views/utils/svg_util.dart";
 import "package:proto_kairos/views/widgets/my_expanded_button.dart";
@@ -272,7 +273,12 @@ class _AddEventControlState extends State<AddEventControl> {
         SizedBox(height: 50.h),
         MyExpandedButton(
           text: "Ajouter",
-          onTap: titleController.text.trim().isNotEmpty ? _addEvent : null,
+          onTap: titleController.text.trim().isNotEmpty
+              ? () {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  _addEvent();
+                }
+              : null,
           opacity: titleController.text.trim().isNotEmpty ? 1.0 : 0.2,
         ),
       ],
@@ -306,6 +312,7 @@ class _AddEventControlState extends State<AddEventControl> {
       );
 
       context.read<CountdownProvider>().addCountdown(newCountdown);
+      showMyToastification(context: context, message: "Événement ajouté", isSuccess: true);
 
       titleController.clear();
       contentController.clear();
@@ -319,7 +326,7 @@ class _AddEventControlState extends State<AddEventControl> {
         print("Erreur dans _addEvent: $e");
       }
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Erreur: ${e.toString()}")));
+        showMyToastification(context: context, message: "Erreur: ${e.toString()}", isError: true);
       }
     }
   }
