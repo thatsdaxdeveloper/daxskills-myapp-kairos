@@ -2,13 +2,11 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:proto_kairos/models/entities/countdown_entity.dart';
 
 class CountdownService {
-  static const String _boxName = 'countdowns';
+  static const String _boxName = 'countdowns_box';
   late Box<CountdownEntity> _countdownsBox;
 
   Future<void> init() async {
-    if (!Hive.isAdapterRegistered(0)) {
-      Hive.registerAdapter(CountdownEntityAdapter());
-    }
+    Hive.registerAdapter(CountdownEntityAdapter());
     _countdownsBox = await Hive.openBox<CountdownEntity>(_boxName);
   }
 
@@ -17,14 +15,12 @@ class CountdownService {
       ..sort((a, b) => a.targetDate.compareTo(b.targetDate));
   }
 
-  Future<void> addCountdown(CountdownEntity countdown) async {
+  // Sauvegarder un compte à rebours
+  Future<void> saveCountdown(CountdownEntity countdown) async {
     await _countdownsBox.put(countdown.id, countdown);
   }
 
-  Future<void> updateCountdown(CountdownEntity countdown) async {
-    await countdown.save();
-  }
-
+  // Supprimer un compte à rebours
   Future<void> deleteCountdown(String id) async {
     await _countdownsBox.delete(id);
   }

@@ -6,7 +6,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:proto_kairos/app_routes.dart';
 import 'package:proto_kairos/controllers/providers/countdown_provider.dart';
 import 'package:proto_kairos/controllers/providers/onboarding_provider.dart';
-import 'package:proto_kairos/models/entities/countdown_entity.dart';
+import 'package:proto_kairos/services/countdown_service.dart';
 import 'package:proto_kairos/views/themes/theme_app.dart';
 import 'package:provider/provider.dart';
 
@@ -16,13 +16,15 @@ Future<void> main() async {
   await initializeDateFormatting('fr_FR', null);
 
   await Hive.initFlutter();
-  Hive.registerAdapter(CountdownEntityAdapter());
+  final countdownService = CountdownService();
+  await CountdownService().init();
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => OnboardingProvider()),
-        ChangeNotifierProvider(create: (_) => CountdownProvider()),
+        Provider<CountdownService>.value(value: countdownService),
+        ChangeNotifierProvider(create: (_) => CountdownProvider(countdownService)),
       ],
       child: const MyApp(),
     ),
