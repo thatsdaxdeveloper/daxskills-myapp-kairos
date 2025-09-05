@@ -111,13 +111,13 @@ flutter:
 
 flutter_native_splash:
   color: "#121212"
-  #image: assets/splash.png
+  image: assets/branding/logo-myapp-kairos.png
   branding: assets/branding/branding-myapp-kairos.png
   branding_mode: bottom
   branding_bottom_padding: 24
 
   android_12:
-    #image: assets/android12splash.png
+    image: assets/branding/logo-myapp-kairos.png
     color: "#121212"
     #icon_background_color: "#111111"
     branding: assets/branding/branding-myapp-kairos.png

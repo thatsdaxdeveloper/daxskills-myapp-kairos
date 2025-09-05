@@ -12,6 +12,7 @@ class Assets {
   static const String editSvgrepoCom = 'assets/icons/edit-svgrepo-com.svg';
   static const String eventsCalendar = 'assets/illustrations/events-calendar.svg';
   static const String infoCircleSvgrepoCom = 'assets/icons/info-circle-svgrepo-com.svg';
+  static const String logoMyappKairos = 'assets/branding/logo-myapp-kairos.png';
   static const String noData = 'assets/illustrations/no-data.svg';
   static const String plusSvgrepoCom = 'assets/icons/plus-svgrepo-com.svg';
   static const String target = 'assets/illustrations/target.svg';

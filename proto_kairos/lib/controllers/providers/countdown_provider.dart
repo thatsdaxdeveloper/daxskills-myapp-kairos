@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:proto_kairos/models/entities/countdown_entity.dart';
+import 'package:proto_kairos/services/countdown_service.dart';
 
 class CountdownProvider with ChangeNotifier {
+  final CountdownService _service = CountdownService();
   final List<CountdownEntity> _countdowns = [];
 
   List<CountdownEntity> get countdowns => _countdowns;
