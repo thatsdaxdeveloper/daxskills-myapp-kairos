@@ -16,15 +16,13 @@ Future<void> main() async {
   await initializeDateFormatting('fr_FR', null);
 
   await Hive.initFlutter();
-  final countdownService = CountdownService();
   await CountdownService().init();
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => OnboardingProvider()),
-        Provider<CountdownService>.value(value: countdownService),
-        ChangeNotifierProvider(create: (_) => CountdownProvider(countdownService)),
+        ChangeNotifierProvider(create: (_) => CountdownProvider()),
       ],
       child: const MyApp(),
     ),
@@ -35,7 +33,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext _context) {
+  Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(360, 690),
       minTextAdapt: true,
