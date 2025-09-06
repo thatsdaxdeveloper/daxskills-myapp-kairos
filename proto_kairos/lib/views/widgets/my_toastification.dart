@@ -27,7 +27,7 @@ class MyToastification extends StatelessWidget {
             child: Row(
               children: [
                 isSuccess || isError
-                    ? svgIcon(path: isError ? Assets.infoCircleSvgrepoCom : Assets.checkCircleSvgrepoCom, size: 16)
+                    ? svgIcon(path: isError ? Assets.infoCircleSvgrepoCom : Assets.checkCircleSvgrepoCom, size: 16, color: isSuccess ? ThemeApp.tropicalIndigo : ThemeApp.trueWhite)
                     : SizedBox.shrink(),
                 if (isSuccess || isError) SizedBox(width: 8.w),
                 Text(
